@@ -158,9 +158,12 @@ Workup for this can be seen here:
 
 -   Some graphs show a right-skewed distribution, specifically total receipts, but this pattern is consistent across both public and private cases, indicating no data imbalance or concern.
 
+- Relationship observed:
+
 ## 7. Workup and Code of EDA Content:
 
 The quality of the data, plots, and statistical summary are observed and processed through a jupyter notebook. To recreate and observe the workup, access it here:
 
 ([https://github.com/MHaynes33/BlackBox/blob/FernMT-patch-1/Notebooks/week1_data_cleaning.ipynb](https://github.com/8090-inc/top-coder-challenge/blob/main/PRD.md)).
 
+Relationship Data: 
