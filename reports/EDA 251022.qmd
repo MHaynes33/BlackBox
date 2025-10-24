@@ -1,0 +1,165 @@
+---
+title: "Machine Learning Team Project:EDA"
+author: "Colyn Martin, Ayushi Bohra, Matthew Fernald, and Mike Haynes"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+number-sections: true
+number-depth: 3
+format:
+  html:
+    toc: true
+    toc-location: right
+    number-sections: false
+    number-depth: 3
+    html-math-method: katex
+    embed-resources: true
+    self-contained: true
+# bibliography: dasc-6000.bib 
+# csl: ieee-with-url.csl
+# linkcolor: red
+# urlcolor: blue
+# link-citations: yes
+# header-includes:
+#   - \usepackage[ruled,vlined,linesnumbered]{algorithm2e}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+```
+
+# Exploratory Data Analysis (EDA)
+
+## 1. Project Overview
+
+We used two groups of datasets: **public_cases** and **private_cases**, each containing various information such as trip duration (days), miles traveled, and total receipts (amount).\
+The goal of this EDA is to evaluate the data quality, identify patterns, and prepare features for our machine learning model.
+
+## 2. Data Used
+
+**Datasets:**
+
+`public_cases` : 1000 rows x 4 columns
+
+([available at https://github.com/MHaynes33/BlackBox/blob/main/data/public_cases.json](https://github.com/8090-inc/top-coder-challenge/blob/main/PRD.md)).
+
+`private_cases` : 1000 rows x 4 columns
+
+([available at https://github.com/MHaynes33/BlackBox/blob/main/data/private_cases.json](https://github.com/8090-inc/top-coder-challenge/blob/main/PRD.md)).
+
+\~ note: rows are the instances and columns are: trip_duration_days, miles_traveled, total_receipts_amount, and expected_output.
+
+### Dataset Features
+
+**Features_of_Data_from_Public_Cases**
+
+| Variable | Description | Type |
+|------------------------|------------------------|------------------------|
+| trip_duration_days | Duration of the trip in days | int64 (Numeric) |
+| miles_traveled | Total distance covered in miles | float64 (Numeric) |
+| total_receipts_amount | Total trip cost in receipts | float64 (Numeric) |
+| expected_output | Model target variable (predicted or reference outcome) | float64 (Numeric) |
+
+**Features_of_Data_from_Private_Cases**
+
+| Variable | Description | Type |
+|------------------------|------------------------|------------------------|
+| trip_duration_days | Duration of the trip in days | int64 (Numeric) |
+| miles_traveled | Total distance covered in miles | float64 (Numeric) |
+| total_receipts_amount | Total trip cost in receipts | float64 (Numeric) |
+| expected_output | Model target variable (predicted or reference outcome) | float64 (Numeric) |
+
+### Quality Check
+
+**Assesing Missing Values**
+
+The number of missing values for each variable was computed to assess data completeness.
+
+| Variable              | Missing Values | \% Missing | Comment  |
+|-----------------------|----------------|------------|----------|
+| trip_duration_days    | 0              | 0%         | Complete |
+| miles_traveled        | 0              | 0%         | Complete |
+| total_receipts_amount | 0              | 0%         | Complete |
+| expected_output       | 0              | 0%         | Complete |
+
+**Interpretation:**\
+No missing values were found in any column across both datasets (`public_cases` and `private_cases`).\
+All variables show **100% completeness**, indicating no imputation or deletion is required beyond verification.
+
+**Assesing Range Validation**
+
+:   Range validation helps ensures that each numeric variable contains values within logical and domain-appropriate limits.
+
+For this dataset:
+
+-   **trip_duration_days (1–14):** All trip durations are within a reasonable range, with no negative or unrealistic values.
+
+-   **miles_traveled (5–1317):** Distances are all positive and plausible for travel data, showing no errors or outliers.
+
+-   **total_receipts_amount (1.42–2503.46):** All costs are within a logical spending range, indicating consistent data entry, non were negative.
+
+-   **expected_output (117.24–2337.73):** Target values are realistic and proportional to trip and cost metrics, non were negative.
+
+No violations or outliers were identified.
+
+**Conclusion:**\
+All features passed range validation. The data set is free from unrealistic or invalid numeric entries and can be safely used for further analysis and modeling without further correction.
+
+## 3.Statistical Summary
+
+table summary of the key descriptive statistics for both datasets (`public_cases` and `private_cases`).
+
+| Variable | Count | Mean | Std | Min | 25% | 50% | 75% | Max |
+|--------|--------|--------|--------|--------|--------|--------|--------|--------|
+| **trip_duration_days** | 1000 | 7.043 | 3.926 | 1.00 | 4.00 | 7.00 | 10.00 | 14.00 |
+| **miles_traveled** | 1000 | 597.414 | 351.300 | 5.00 | 275.96 | 621.00 | 893.00 | 1317.07 |
+| **total_receipts_amount** | 1000 | 1211.057 | 742.854 | 1.42 | 530.38 | 1171.90 | 1881.10 | 2503.46 |
+| **expected_output** | 1000 | 1349.114 | 470.316 | 117.24 | 1019.30 | 1454.26 | 1711.12 | 2337.73 |
+
+**Interpretation:**
+
+Both `public_cases` and `private_cases` have identical distributions across all variables.\
+Trip durations, distances, and receipt amounts all fall within realistic and consistent ranges.
+
+The data shows no missing values or anomalies and is suitable for further analysis and modeling.
+
+## 4.Plots/Visuals
+
+-   I am having trouble with inserting the plots on EDA (I ahve tried various ways, no success)
+
+## 5. Outliers or Anomaly Detected
+
+None. Outliers were checked using the IQR rule and none were detected.
+
+**Results for Checking Outliers Using IQR**
+
+### Outlier Summary (Public Cases)
+
+| feature               | lower_bound | upper_bound | outliers | outlier\_% |
+|-----------------------|-------------|-------------|----------|------------|
+| trip_duration_days    | -5.00000    | 19.00000    | 0        | 0.0        |
+| miles_traveled        | -649.60000  | 1818.56000  | 0        | 0.0        |
+| total_receipts_amount | -1495.71375 | 3907.19625  | 0        | 0.0        |
+| expected_output       | -18.44000   | 2748.86000  | 0        | 0.0        |
+
+### Outlier Summary (Private Cases)
+
+| feature               | lower_bound | upper_bound | outliers | outlier\_% |
+|-----------------------|-------------|-------------|----------|------------|
+| trip_duration_days    | -6.50000    | 21.50000    | 0        | 0.0        |
+| miles_traveled        | -626.50000  | 1793.50000  | 0        | 0.0        |
+| total_receipts_amount | -1275.11875 | 3639.45125  | 0        | 0.0        |
+
+Workup for this can be seen here:
+
+## 6. Summary (Findings) --needs editing
+
+-   Data has no missing values, no duplicates, and no outliers
+
+-   All values are valid and within range
+
+-   Some graphs show a right-skewed distribution, specifically total receipts, but this pattern is consistent across both public and private cases, indicating no data imbalance or concern.
+
+## 7. Workup and Code of EDA Content:
+
+The quality of the data, plots, and statistical summary are observed and processed through a jupyter notebook. To recreate and observe the workup, access it here:
+
+([https://github.com/MHaynes33/BlackBox/blob/FernMT-patch-1/Notebooks/week1_data_cleaning.ipynb](https://github.com/8090-inc/top-coder-challenge/blob/main/PRD.md)).
