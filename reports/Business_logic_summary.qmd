@@ -1,0 +1,56 @@
+## Business Logic Summary  
+### PRD + Interview Integration
+
+#### System Context
+ACME Corp’s reimbursement engine operates as an undocumented legacy system with opaque logic and persistent inconsistencies.  
+The PRD and discovery interviews indicate that the engine calculates reimbursements from **trip duration**, **total mileage**, and **receipt totals**, but introduces multiple non-linear modifiers and edge-case behaviors.  
+Our objective in this project is **to replicate the behavior exactly**, including its quirks and rounding artifacts, rather than to rationalize or optimize it.
+
+---
+
+### 1  Observed Behavior Patterns
+
+| Domain | Interview Evidence | Apparent Pattern | Analytical Feature |
+|:--|:--|:--|:--|
+| **Per Diem Base** | Lisa (Acc): “$100 a day seems to be the base.” | Linear base rate per day. | `trip_days × 100` |
+| **Duration Bonuses / Penalties** | Lisa (5-day bonus); Jennifer (HR sweet spot 4–6 days); Marcus (8-day drop) | +5–10 % uplift for 5-day trips; 4–6 days baseline; −10 % beyond 7 days. | `duration_bonus` |
+| **Mileage Curve** | Lisa (tiered mileage); Marcus (non-linear drop); Kevin (180–220 mi/day); Jennifer (inefficiency complaints) | Log-decay after 100 mi; reward peaks 180–220 mi/day; penalty > 300 mi/day. | `miles_per_day`, `log_miles` |
+| **Efficiency Bonus** | Kevin (sweet-spot combo 5 days × 200 mi/day × <$100 spend) | Multiplier for balanced efficiency; over-driving or under-driving penalized. | `efficiency_score` |
+| **Spending Rate** | Kevin (optimal bands); Lisa (diminishing returns); Marcus (high-receipt penalty) | Optimal $75–$120/day; penalty < $50 or > $120; “vacation penalty” for > 8 days high spend. | `spend_per_day` |
+| **Receipt Non-linearity** | Lisa (cap effect); Dave (low-receipt penalty) | Curved response: best range ≈ $600–$800 per trip; under $50 or over $1 000 penalized. | `receipts`, `spend_curve` |
+| **Rounding Anomalies** | Lisa (“.49 / .99 cents round up”) | Micro-bonus for .49 /.99 endings (likely rounding bug). | `receipt_cents` |
+| **Timing Effects** | Marcus (Q4 boost); Kevin (weekday bias) | ± 5 % by month or weekday; Tuesday > Friday; Q4 generosity pattern. | `month`, `weekday`, `quarter` |
+| **Department Bias** | Jennifer (Sales > Ops > HR); Marcus (Sales advantage) | Legacy weighting by department type. | `department_weight` |
+| **Profile Memory** | Marcus (history sensitivity); Jennifer (new-hire handicap) | Rolling user average influences payout; new users under-rewarded. | `user_avg_claim` |
+| **Random Noise** | Dave & Kevin (randomness prevents gaming) | ± 5–10 % pseudo-random noise seeded by submission date or external index. | `stochastic_seed` |
+
+---
+
+### 2  Behavioral Hypotheses
+
+1. **Efficiency Reward:** Bonuses occur when mileage and duration achieve 180–220 mi/day.  
+2. **Expenditure Discipline:** Both under-spending and over-spending trigger penalties; optimal window $75–$120/day.  
+3. **Trip Length Sweet Spot:** Five-day trips receive consistent uplift; > 7 days incur “vacation penalty.”  
+4. **Adaptive Memory:** Frequent large claims reduce subsequent payouts through rolling adjustment.  
+5. **Department Weighting:** Certain departments (esp. Sales) receive legacy bias in base multiplier.  
+6. **Receipt Non-linearity:** Nonlinear bonus curve centered on $700 trip spend; diminishing returns outside that band.  
+7. **Intentional Stochasticity:** Randomized ± 5–10 % modifier discourages optimization and simulates unpredictability.
+
+---
+
+### 3  Modeling Approach
+Use a **non-linear ensemble regressor** (Random Forest / Gradient Boosting) to approximate the rule tree and interaction effects of the legacy system.
+
+#### Feature Engineering Plan
+
+```python
+df["miles_per_day"]  = df["total_miles"] / df["trip_days"]
+df["spend_per_day"]  = df["receipts"] / df["trip_days"]
+df["log_miles"]      = np.log1p(df["total_miles"])
+df["receipt_cents"]  = df["receipts"] % 1
+df["weekday"]        = df["submission_date"].dt.dayofweek
+df["quarter"]        = df["submission_date"].dt.quarter
+df["efficiency_score"] = df["miles_per_day"] * np.clip(df["trip_days"].between(4,6), 0, 1)
+df["department_weight"] = df["department"].map({"Sales":1.05, "Ops":1.00, "HR":0.95})
+
+```
