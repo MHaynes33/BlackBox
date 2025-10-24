@@ -41,11 +41,11 @@ The goal of this EDA is to evaluate the data quality, identify patterns, and pre
 
 ([available at https://github.com/MHaynes33/BlackBox/blob/main/data/public_cases.json](https://github.com/8090-inc/top-coder-challenge/blob/main/PRD.md)).
 
-`private_cases` : 1000 rows x 4 columns
+`private_cases` : 1000 rows x 3 columns
 
 ([available at https://github.com/MHaynes33/BlackBox/blob/main/data/private_cases.json](https://github.com/8090-inc/top-coder-challenge/blob/main/PRD.md)).
 
-\~ note: rows are the instances and columns are: trip_duration_days, miles_traveled, total_receipts_amount, and expected_output.
+\~ note: rows are the instances and columns are: trip_duration_days, miles_traveled, total_receipts_amount, and expected_output (only on public cases).
 
 ### Dataset Features
 
@@ -163,3 +163,4 @@ Workup for this can be seen here:
 The quality of the data, plots, and statistical summary are observed and processed through a jupyter notebook. To recreate and observe the workup, access it here:
 
 ([https://github.com/MHaynes33/BlackBox/blob/FernMT-patch-1/Notebooks/week1_data_cleaning.ipynb](https://github.com/8090-inc/top-coder-challenge/blob/main/PRD.md)).
+
