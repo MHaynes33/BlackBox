@@ -1,0 +1,62 @@
+---
+title: "Machine Learning Team Project: Feature Definitions and Rationales"
+author: "Colyn Martin, Ayushi Bohra, Matthew Fernald, and Mike Haynes"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+number-sections: true
+number-depth: 3
+format:
+  html:
+    toc: true
+    toc-location: right
+    number-sections: false
+    number-depth: 3
+    html-math-method: katex
+    embed-resources: true
+    self-contained: true
+# bibliography: dasc-6000.bib 
+# csl: ieee-with-url.csl
+# linkcolor: red
+# urlcolor: blue
+# link-citations: yes
+# header-includes:
+#   - \usepackage[ruled,vlined,linesnumbered]{algorithm2e}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+```
+
+# Feature Definitions and Rationales Table
+
+The following table defines each feature used in the model and their analytical relevance and expected contribution to predicting `reimbursement`.
+
+| **Feature** | **Definition** | **Type** | **Rationale / Analytical Role** |
+|:-----------------|:-----------------|:-----------------|:-----------------|
+| **trip_duration_days** | Number of days the trip lasted. | Numeric (integer) | Represents time-based expenses such as lodging, meals, and daily allowances. Longer trips typically result in higher reimbursements, but the effect may taper off for very long durations. |
+| **miles_traveled** | Total number of miles traveled during the trip. | Numeric (float) | Directly tied to mileage-based reimbursement rates. A major cost driver that scales proportionally with distance, showing strong correlation with both receipts and total reimbursement. |
+| **total_receipts_amount** | Total monetary value of all receipts submitted for a trip (e.g., hotel, meals, supplies). | Numeric (float) | Captures the most direct indicator of trip cost. Strongest predictor of reimbursement, as it reflects actual expenditures that are reimbursable. |
+| **reimbursement (expected_output)** | Total amount reimbursed or the predicted reimbursement value. Serves as the target variable in the model. | Numeric (float, continuous) | Target feature for prediction. The model estimates this based on the three cost-related independent features. |
+| **dataset_origin** | Indicates the source dataset (`public_cases` or `private_cases`). | Categorical | Useful for checking potential distributional differences or biases between data sources. Not a predictor in the baseline model but important for diagnostics and validation. |
+
+------------------------------------------------------------------------
+
+### Summary/Insights for these features
+
+All independent variables (`trip_duration_days`, `miles_traveled`, and `total_receipts_amount`) are continuous and positively correlated with the dependent variable (`reimbursement`).\
+Together, they capture the key cost dimensions of trip-related expenses:
+
+\- **Duration-based costs** → time on trip\
+- **Distance-based costs** → travel mileage\
+- **Expense-based costs** → total receipts
+
+This feature set provides a strong, interpretable foundation for a baseline predictive model, with potential for future enhancement through interaction terms or nonlinear transformations.
+
+#### Where to find the original data:
+
+`public_cases` :
+
+([available at https://github.com/MHaynes33/BlackBox/blob/main/data/public_cases.json](https://github.com/8090-inc/top-coder-challenge/blob/main/PRD.md)).
+
+`private_cases` :
+
+([available at https://github.com/MHaynes33/BlackBox/blob/main/data/private_cases.json](https://github.com/8090-inc/top-coder-challenge/blob/main/PRD.md)).
