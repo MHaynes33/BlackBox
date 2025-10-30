@@ -1,0 +1,391 @@
+``` yaml
+---
+title: "Machine Learning Team Project:EDA"
+author: "Colyn Martin, Ayushi Bohra, Matthew Fernald, and Mike Haynes"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+number-sections: true
+number-depth: 3
+
+format:
+  html:
+    toc: true
+    toc-location: right
+    number-sections: false
+    number-depth: 3
+    html-math-method: katex
+    embed-resources: true
+    self-contained: true
+
+execute:
+  echo: true
+  warning: false
+  message: false
+  cache: false
+
+engine: knitr
+---
+```
+
+------------------------------------------------------------------------
+
+knitr::opts_chunk\$set(warning = FALSE, message = FALSE)
+
+library(reticulate) use_python("C:/Users/Colyn/AppData/Local/Programs/Python/Python313/python.exe", required = TRUE) py_config()
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+```
+
+# Exploratory Data Analysis (EDA)
+
+## 1. Project Overview
+
+We used two groups of datasets: **public_cases** and **private_cases**, each containing various information such as trip duration (days), miles traveled, and total receipts (amount).\
+The goal of this EDA is to evaluate the data quality, identify patterns, and prepare features for our machine learning model.
+
+## 2. Data Used
+
+**Datasets:**
+
+`public_cases` : 1000 rows x 4 columns
+
+([available at https://github.com/MHaynes33/BlackBox/blob/main/data/public_cases.json](https://github.com/8090-inc/top-coder-challenge/blob/main/PRD.md)).
+
+`private_cases` : 5000 rows x 3 columns
+
+([available at https://github.com/MHaynes33/BlackBox/blob/main/data/private_cases.json](https://github.com/8090-inc/top-coder-challenge/blob/main/PRD.md)).
+
+\~ note: rows are the instances and columns are: trip_duration_days, miles_traveled, total_receipts_amount, and expected_output (reimbursement). Both datasets have trip_duration_days, miles_traveled, and total_receipts_amount for columns but only `public_cases` has expected_output.
+
+### Dataset Features
+
+**Features_of_Data_from_Public_Cases**
+
+| Variable | Description | Type |
+|----|----|----|
+| trip_duration_days | Duration of the trip in days | int64 (Numeric) |
+| miles_traveled | Total distance covered in miles | float64 (Numeric) |
+| total_receipts_amount | Total trip cost in receipts | float64 (Numeric) |
+| expected_output | Model target variable (predicted or reference outcome) | float64 (Numeric) |
+
+**Features_of_Data_from_Private_Cases**
+
+| Variable              | Description                     | Type              |
+|-----------------------|---------------------------------|-------------------|
+| trip_duration_days    | Duration of the trip in days    | int64 (Numeric)   |
+| miles_traveled        | Total distance covered in miles | float64 (Numeric) |
+| total_receipts_amount | Total trip cost in receipts     | float64 (Numeric) |
+
+### Quality Check
+
+**Assesing Missing Values**
+
+The number of missing values for each individual variable as presented within each dataset was computed to assess data completeness.
+
+| Variable              | Missing Values | \% Missing | Comment  |
+|-----------------------|----------------|------------|----------|
+| trip_duration_days    | 0              | 0%         | Complete |
+| miles_traveled        | 0              | 0%         | Complete |
+| total_receipts_amount | 0              | 0%         | Complete |
+| expected_output       | 0              | 0%         | Complete |
+
+**Interpretation:** No missing values were found in any column across both datasets (`public_cases` and `private_cases`).\
+All variables show **100% completeness**, indicating no imputation or deletion is required beyond verification.
+
+**Assessing Missing Values Once Data from Public Cases and Private Cases were Merged, so total should be 6000**
+
+| Variable | Missing Values | \% Missing | Comment |
+|----|----|----|----|
+| trip_duration_days | 0 | 0% | Complete |
+| miles_traveled | 0 | 0% | Complete |
+| total_receipts_amount | 0 | 0% | Complete |
+| reimbursement (expected_output) | 5000 | 83.3% | Mostly missing (because expected_output column is not available for `private_cases`, needs to predict eventually ) |
+
+**Interpretation:** No missing values were found in any column across both datasets (`public_cases` and `private_cases`). However, there is a mismatched on total count within each feature since `private_cases` only had 3 columns instead of 4 and it does not have an expected_output column. However, this is an output that we are supposed to be able to predict.
+
+:   Note: The expected_output column is relabeled reimbursement once we combined the data for both datasets (`public_cases` and `private_cases`)
+
+**Assesing Range Validation**
+
+:   Range validation helps ensures that each numeric variable contains values within logical and domain-appropriate limits.
+
+For this dataset:
+
+-   **trip_duration_days (1–14):** All trip durations are within a reasonable range, with no negative or unrealistic values.
+
+-   **miles_traveled (5–1317):** Distances are all positive and plausible for travel data, showing no errors or outliers.
+
+-   **total_receipts_amount (1.42–2503.46):** All costs are within a logical spending range, indicating consistent data entry, non were negative.
+
+-   **expected_output (117.24–2337.73):** Target values are realistic and proportional to trip and cost metrics, non were negative.
+
+No range violations were identified, making all values valid.
+
+**Conclusion:** All features passed range validation. The data set is free from unrealistic or invalid numeric entries and can be safely used for further analysis and modeling without further correction.
+
+## 3.Statistical Summary
+
+table summary of the key descriptive statistics for both datasets (`public_cases` and `private_cases`).
+
+### Statistical Summary for Public Cases
+
+| Statistic | trip_duration_days | miles_traveled | total_receipts_amount | expected_output |
+|----|---:|---:|---:|---:|
+| count | 1000.000000 | 1000.00000 | 1000.00000 | 1000.000000 |
+| mean | 7.043000 | 597.41374 | 1211.05687 | 1349.114030 |
+| std | 3.926139 | 351.29979 | 742.85418 | 470.316464 |
+| min | 1.000000 | 5.00000 | 1.42000 | 117.240000 |
+| 25% | 4.000000 | 275.96000 | 530.37750 | 1019.297500 |
+| 50% | 7.000000 | 621.00000 | 1171.90000 | 1454.260000 |
+| 75% | 10.000000 | 893.00000 | 1881.10500 | 1711.122500 |
+| max | 14.000000 | 1317.07000 | 2503.46000 | 2337.730000 |
+
+### Statistical Summary for Private Cases
+
+| Statistic | trip_duration_days | miles_traveled | total_receipts_amount |
+|-----------|-------------------:|---------------:|----------------------:|
+| count     |        5000.000000 |    5000.000000 |           5000.000000 |
+| mean      |           7.199800 |     589.076406 |           1186.129164 |
+| std       |           3.998034 |     346.673720 |            719.695557 |
+| min       |           1.000000 |       5.000000 |              0.270000 |
+| 25%       |           4.000000 |     281.000000 |            567.845000 |
+| 50%       |           7.000000 |     588.000000 |           1154.810000 |
+| 75%       |          11.000000 |     886.000000 |           1796.487500 |
+| max       |          14.000000 |    1348.590000 |           2502.710000 |
+
+### Statistical Summary for Combined Datasets
+
+| Statistic | trip_duration_days | miles_traveled | total_receipts_amount | reimbursement |
+|----|---:|---:|---:|---:|
+| count | 6000.000000 | 6000.000000 | 6000.000000 | 1000.000000 |
+| mean | 7.173667 | 590.465962 | 1190.283782 | 1349.114030 |
+| std | 3.986246 | 347.433429 | 723.603533 | 470.316464 |
+| min | 1.000000 | 5.000000 | 0.270000 | 117.240000 |
+| 25% | 4.000000 | 280.645000 | 561.285000 | 1019.297500 |
+| 50% | 7.000000 | 594.500000 | 1157.310000 | 1454.260000 |
+| 75% | 11.000000 | 888.000000 | 1810.312500 | 1711.122500 |
+| max | 14.000000 | 1348.590000 | 2503.460000 | 2337.730000 |
+
+**Interpretation:**
+
+Across individual public, private, and combined datasets, the overall trip characteristics remain consistent. The average trip duration is approximately 7 days, with trips ranging from 1 to 14 days. The average distance traveled is around 590 miles, indicating a mix of both short and long-distance trips. The mean total receipts amount is about \$1,200, though the large spread and right-skewed distribution suggest a few high-cost trips influence the averages.
+
+Both public and private cases exhibit nearly identical behavior in duration, distance, and total receipts, suggesting similar travel patterns or cost structures between the two groups. In public cases, the expected output average (\$1,349) slightly exceeds the total receipts, indicating that projected reimbursements or returns are generally higher than actual costs.
+
+In the combined dataset, overall patterns remain stable, confirming no major disparities between public and private cases. However, the reimbursement column is largely incomplete, with data available for only about 17% of all records. To address this, the next stage of analysis will focus on predicting the missing reimbursement values using a linear model based on observed relationships between data features. This will allow for a more complete and accurate assessment of the dataset.
+
+## 4.Plots/Visuals -- work in progress
+
+-   I am having trouble with plotting on EDA (I have tried various ways, no success but working on it!, please be patient with me please!!)
+
+## 5. Outliers or Anomaly Check
+
+None. Outliers were checked using the IQR (Interquartile Range) and none were detected.
+
+**Results for Checking Outliers Using IQR**
+
+### Outlier Summary (Public Cases)
+
+| feature               | lower_bound | upper_bound | outliers | outlier\_% |
+|-----------------------|-------------|-------------|----------|------------|
+| trip_duration_days    | -5.00000    | 19.00000    | 0        | 0.0        |
+| miles_traveled        | -649.60000  | 1818.56000  | 0        | 0.0        |
+| total_receipts_amount | -1495.71375 | 3907.19625  | 0        | 0.0        |
+| expected_output       | -18.44000   | 2748.86000  | 0        | 0.0        |
+
+### Outlier Summary (Private Cases)
+
+| feature               | lower_bound | upper_bound | outliers | outlier\_% |
+|-----------------------|-------------|-------------|----------|------------|
+| trip_duration_days    | -6.50000    | 21.50000    | 0        | 0.0        |
+| miles_traveled        | -626.50000  | 1793.50000  | 0        | 0.0        |
+| total_receipts_amount | -1275.11875 | 3639.45125  | 0        | 0.0        |
+
+We applied the **Standard 1.5 × IQRmethod** to identify potential outliers in the following numeric variables:
+
+-   `trip_duration_days`\
+-   `miles_traveled`\
+-   `total_receipts_amount`\
+-   `expected_output` this is interchangeably referred to as reimbursement
+
+**Result/Interpretation:**\
+No values were found outside the 1.5 × IQR range in either the public or private datasets.\
+This indicates that the data is statistically consistent, with no extreme or anomalous values influencing the distributions.\
+Overall, the numeric features appear well-behaved and suitable for further analysis.
+
+## 6. Feature Exploration Data Summary
+
+### Trip Duration (Days)
+
+-   **Type:** Numeric (integer)\
+-   **Distribution:** Slight right skew — most trips range between 1 to 5 days.\
+-   **Correlation:** Moderate positive correlation (\~0.45) with reimbursement.\
+-   **Insight:** Longer trips generally increase reimbursement due to additional lodging and meal expenses, but the effect tapers after a week.
+
+------------------------------------------------------------------------
+
+### Miles Traveled
+
+-   **Type:** Numeric (integer)\
+-   **Distribution:** Right-skewed, most travel occurs under 500 miles.\
+-   **Correlation:** Strong positive correlation (\~0.80) with reimbursement.\
+-   **Insight:** Mileage is a major cost driver, showing nearly linear growth in payout with distance traveled.
+
+------------------------------------------------------------------------
+
+### Total Receipts Amount
+
+-   **Type:** Numeric (float)\
+-   **Distribution:** Positively skewed, with a few high-value cases but *no statistical outliers detected (IQR test)*.
+-   **Correlation:** Strongest correlation (\~0.85) with reimbursement.\
+-   **Insight:** Reflects direct trip costs such as accommodation and meals, highly predictive of total reimbursement.
+
+------------------------------------------------------------------------
+
+### Reimbursement Amount (Target Variable)
+
+-   **Type:** Continuous numeric (float, rounded to 2 decimals)\
+-   **Distribution:** Continuous, slightly right-skewed with some large but valid reimbursements — *no statistical outliers found*.\
+-   **Relationships:**
+    -   Strong link to **total receipts** and **miles traveled**\
+    -   Moderate link to **trip duration**\
+-   **Insight:** Represents the total predicted payout, primarily influenced by miles traveled and total receipts.\
+    Reimbursement can be effectively predicted using a **linear model** based on these three input variables.
+
+------------------------------------------------------------------------
+
+### Public vs. Private Data Comparison
+
+-   **Patterns:** Both datasets follow similar trends and ranges.\
+-   **Variance:** Slightly higher variance in private data, suggesting more diverse travel conditions.\
+-   **Consistency:** Alignment in feature patterns confirms data reliability and shared underlying logic.
+
+------------------------------------------------------------------------
+
+### Overall Data Insights
+
+-   **Receipts** and **miles traveled** are the dominant predictors of reimbursement.\
+-   **Trip duration** adds context but shows a diminishing effect on reimbursement for longer trips.\
+-   No missing data or invalid records were detected, confirming **high data integrity**.\
+-   No statistical outliers were identified in either the public or private datasets, indicating that the data is **consistent, well-distributed, and free from extreme or anomalous values**.\
+    Such uniformity suggests **high data quality**, likely because the dataset was synthetically generated to simulate realistic yet controlled travel reimbursement patterns.\
+    This also supports the **modeling phase**, ensuring that no abnormal records will skew regression or classification outcomes.\
+-   Both datasets demonstrate **consistent behavior**, validating the model’s robustness across environments.
+
+## 7. Workup and Code Sources
+
+The quality of the data, plots, and statistical summary are observed and processed through a jupyter notebook. To recreate and observe the workup, access it here:
+
+([https://github.com/MHaynes33/BlackBox/blob/FernMT-patch-1/Notebooks/week1_data_cleaning.ipynb](https://github.com/8090-inc/top-coder-challenge/blob/main/PRD.md)).
+
+Further exploration of the data, plots for the combied data, assessment of dataset relationship, and data features were observed and processed through a jupyter notebook. To recreate and observe the workup, access it here:
+
+([https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/01_EDA_Reimbursement.ipynb](https://github.com/8090-inc/top-coder-challenge/blob/main/PRD.md)).
+
+------------------------------------------------------------------------
+
+## 8. Baseline Model
+
+### Name: ACME Reimbursement Baseline (v1)
+
+
+The purpose of the baseline model is to establish the predictive benchmark for estimating the reimbursement values for the 'private_cases' data set based on the other available features:
+
+trip-duration_days, miles_traveled, and total_receipts_amount
+
+Task: Regression: predict reimbursement amount
+
+~ This baseline model can serve as a reference point to compare the performance of other and more complex algorithms that will be developed later on (~ eventually Non-Linear Ensemble Regressor (Random Forest / Gradient Boosting as mentioned by Phase 1, to replicate the ACME's reimbursement logic)
+
+### Model Type
+
+***Linear Regression***
+
+This baseline model will use a multiple linear regression model where reimbursement is modeled as a linear combination of the three independent variables:
+
+### Formula
+
+$$
+\text{reimbursement} = \beta_0 + \beta_1 (\text{trip\_duration\_days}) + \beta_2 (\text{miles\_traveled}) + \beta_3 (\text{total\_receipts\_amount}) + \varepsilon
+$$ Input features: trip duration, distance, and total receipts
+
+#### Formula Coefficients
+
+| Symbol | Parameter | Meaning |
+|:---|:---|:---|
+| **β₀ (beta-zero)** | Intercept | The baseline reimbursement amount when all predictors are zero. Represents the constant term. |
+| **β₁ (beta-one)** | Coefficient for `trip_duration_days` | Change in reimbursement for each additional day of trip duration, holding other factors constant. |
+| **β₂ (beta-two)** | Coefficient for `miles_traveled` | Change in reimbursement for each additional mile traveled, holding other factors constant. |
+| **β₃ (beta-three)** | Coefficient for `total_receipts_amount` | Change in reimbursement per additional dollar of receipts, holding other factors constant. |
+| **ε (epsilon)** | Error term | Random noise or unexplained variation between predicted and actual reimbursement values. Captures effects of factors not included in the model. |
+
+***More Model Details***
+
+Target: reimbursement (renamed from expected_output)
+
+Training data: 'public_cases' data set (1,000 rows), since this data includes the reimbursement column
+
+Evaluation metric: $R^2$ (coefficient of determination) and RMSE (root mean squared error)
+
+### Expected Outcomes
+
+***Recall the Correlations***
+
+| Feature Relationship | Correlation (r) | Interpretation |
+|:---|:--:|:---|
+| total_receipts_amount ↔ reimbursement | ≈ 0.85 | Strong positive correlation |
+| miles_traveled ↔ reimbursement | ≈ 0.80 | Strong positive correlation |
+| trip_duration_days ↔ reimbursement | ≈ 0.45 | Moderate positive correlation |
+
+From this correlation summary, we can infer that the **linear baseline model** should perform strongly, since the independent features are all positively associated with the target variable.
+
+------------------------------------------------------------------------
+
+#### Relationship Between Correlation (r) and R²
+
+In simple linear regression with one predictor, the relationship between the correlation coefficient ( r ) and the coefficient of determination ( R\^2 ) is defined as:
+
+$$
+R^2 = r^2
+$$
+
+Therefore, a single strong predictor such as `total_receipts_amount` with ( r = 0.85 ) would explain:
+
+$$
+R^2 = 0.85^2 = 0.7225
+$$
+
+or about **72% of the variance** in reimbursement.
+
+When multiple correlated predictors are combined, the total explained variance increases. A reasonable approximation for their combined effect is:
+
+$$
+R^2_{\text{combined}} \approx 1 - (1 - r_1^2)(1 - r_2^2)(1 - r_3^2)
+$$
+
+Substituting observed correlations:
+
+$$
+\begin{aligned}
+R^2_{\text{combined}} 
+&\approx 1 - (1 - 0.85^2)(1 - 0.80^2)(1 - 0.45^2) \\
+&= 1 - (0.2775)(0.3600)(0.7975) \\
+&= 1 - 0.0796 \\
+&\approx 0.92
+\end{aligned}
+$$
+
+Since some overlap exists between predictors (e.g., longer trips often have higher receipts and mileage), the practical ( R\^2 ) will be slightly lower—typically **in the 0.80–0.88 range**.
+
+------------------------------------------------------------------------
+
+#### Expected Baseline Model Performance
+
+-   **R²:** ≈ 0.80–0.88 → The model explains 80–88% of the variance in reimbursement.\
+-   **RMSE:** ≈ 100–200 → Average error range based on residual standard deviation (given mean reimbursement ≈ \$1,349 and SD ≈ \$470).
+
+**Interpretation:**\
+This confirms that the baseline multiple linear regression model provides a strong initial benchmark.\
+`total_receipts_amount` and `miles_traveled` dominate the model’s predictive strength, while `trip_duration_days` offers modest contextual improvement.
+
+------------------------------------------------------------------------
