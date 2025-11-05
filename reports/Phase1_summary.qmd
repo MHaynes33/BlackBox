@@ -24,6 +24,7 @@ During Phase 1, our objective was to **understand the behavior of ACME Corp’s 
 The goal at this stage was not to redesign or improve the system, but to form a **clear behavioral understanding** that we will later replicate using machine learning.
 
 ## Dataset Reviewed
+The dataset includes 6,000 records (1,000 public with reimbursement labels and 5,000 unlabeled private cases).
 We examined the historical reimbursement dataset, which includes:
 
 - **Trip Duration (days)**
