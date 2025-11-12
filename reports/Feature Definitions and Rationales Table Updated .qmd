@@ -1,0 +1,66 @@
+---
+title: "Machine Learning Team Project: Feature Definitions and Rationales"
+author: "Colyn Martin, Ayushi Bohra, Matthew Fernald, and Mike Haynes"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+number-sections: true
+number-depth: 3
+format:
+  html:
+    toc: true
+    toc-location: right
+    number-sections: false
+    number-depth: 3
+    html-math-method: katex
+    embed-resources: true
+    self-contained: true
+# bibliography: dasc-6000.bib 
+# csl: ieee-with-url.csl
+# linkcolor: red
+# urlcolor: blue
+# link-citations: yes
+# header-includes:
+#   - \usepackage[ruled,vlined,linesnumbered]{algorithm2e}
+---
+
+# Feature Definitions and Rationales Table
+
+The following table defines each feature used in the model, including their analytical purpose and relationship to predicting `reimbursement`.
+
+| **Feature** | **Definition** | **Type** | **Rationale / Analytical Role** |
+|:---------------|:---------------|:---------------|:------------------------|
+| **trip_duration_days** | Number of days the trip lasted. | Numeric (integer) | Represents time-based expenses (lodging, meals, and daily allowances). Longer trips typically yield higher reimbursements, but with diminishing returns. |
+| **miles_traveled** | Total miles traveled during the trip. | Numeric (float) | Represents travel distance, a direct component of mileage reimbursement. Strongly correlated with total receipts and total reimbursement. |
+| **total_receipts_amount** | Total amount from all receipts submitted for the trip (e.g., hotels, meals, parking). | Numeric (float) | Primary monetary indicator of travel cost; a key driver of reimbursement. |
+| **cost_per_day** | `total_receipts_amount / trip_duration_days` | Numeric (derived float) | Reflects average daily spending intensity — useful for identifying cost efficiency over time. |
+| **cost_per_mile** | `total_receipts_amount / miles_traveled` | Numeric (derived float) | Measures spending relative to distance, highlighting differences in cost behavior for short vs. long trips. |
+| **miles_per_day** | `miles_traveled / trip_duration_days` | Numeric (derived float) | Captures pace of travel. Helps explain whether long-distance but short-duration trips affect reimbursements differently. |
+| **cost_ratio** | `cost_per_day / cost_per_mile` | Numeric (derived float) | Synthesizes daily vs. distance-based costs. Indicates spending efficiency balance — higher ratios suggest expensive short trips or inefficient travel. |
+
+**Target Variable:** \| **Feature** \| **Definition** \| **Type** \| **Rationale / Analytical Role** \| \|:-------------\|:---------------\|:----------\|:--------------------------------\| \| **reimbursement** \| Total amount reimbursed or predicted value. \| Numeric (continuous) \| Dependent variable representing the final reimbursement outcome predicted by the model. \|
+
+------------------------------------------------------------------------
+
+### Summary & Insights
+
+All seven independent variables (`trip_duration_days`, `miles_traveled`, `total_receipts_amount`, and four derived ratios) are **continuous, interpretable, and interrelated**.
+
+They collectively capture:
+
+-   **Duration-based costs** → number of travel days\
+-   **Distance-based costs** → mileage-related behavior\
+-   **Spending efficiency** → ratios showing cost per mile/day patterns
+
+**Insights from Feature Analysis**
+
+-   `total_receipts_amount` and 'miles_traveled' are the strongest predictors of reimbursement.
+-   `trip_duration_days` has a moderate but consistent effect.
+-   Derived features like `cost_per_mile` and `cost_ratio` add context but lower direct correlation, showing indirect impact.
+-   These findings confirm that the reimbursement logic is primarily driven by trip cost and travel distance — aligning with ACME’s legacy payout behavior.
+
+------------------------------------------------------------------------
+
+### Information Source and Workup
+
+https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/Feature%20Correlation%20and%20Visualization.ipynb
+
+https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/02_Feature_Engineering_and_Baseline_Model.ipynb
