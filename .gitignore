@@ -205,3 +205,29 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# ===============================
+# Quarto & Jupyter Render Outputs
+# ===============================
+# Quarto render folders and HTML artifacts
+*.html
+*_files/
+*_cache/
+*.qmd-rendered/
+
+# Jupyter temporary files
+.ipynb_checkpoints/
+*.ipynb~
+*.ipynb_save/
+*.ipynb.json
+
+# Data outputs
+*.csv
+*.xlsx
+*.parquet
+*.sav
+*.pkl
+combined_clean.csv
+public_clean.csv
+private_clean.csv
+

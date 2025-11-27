@@ -1,0 +1,80 @@
+---
+title: "Phase 1 Summary – Exploratory Analysis & Business Logic Understanding"
+format:
+  html:
+    theme: cosmo
+    toc: true
+    toc-location: left
+---
+
+## Team Roles & Responsibilities
+Our team is organized to ensure each member contributes to every phase, with clear ownership areas and shared collaboration.
+
+| Team Member | Role | Primary Responsibilities |
+|---|---|---|
+| **Ayushi** | Technical Lead / ML Engineer | Leads feature engineering, modeling approach, and code structure. Ensures model reproducibility and pipeline design. |
+| **Mike** | Business Analyst | Interprets interview insights and PRD context, aligns findings to business logic, writes narrative justification for modeling decisions. |
+| **Colyn** | Documentation & Communication Lead | Owns formatting of reports, slide design, final written outputs, and ensures clarity of deliverables. |
+| **Matt** | QA / Testing / Data Wrangler | Validates dataset integrity, performs spot-checks on model outputs, tests edge cases, and verifies correctness before submission. |
+
+---
+
+## Overview
+During Phase 1, our objective was to understand the behavior of ACME Corp’s legacy reimbursement system using the provided 1,000 historical reimbursement examples (`public_cases.json`) and stakeholder interview narratives.  
+The goal at this stage was not to redesign or improve the system, but to form a clear behavioral understanding that we will later replicate using machine learning.
+
+## Dataset Reviewed
+The dataset includes 6,000 records (1,000 public with reimbursement labels and 5,000 unlabeled private cases).
+We examined the historical reimbursement dataset, which includes:
+
+- **Trip Duration (days)**
+- **Total Mileage**
+- **Total Receipts**
+- **Reimbursement Amount** (system output)
+
+A data cleaning notebook was created to:
+- Remove formatting inconsistencies
+- Validate numeric ranges
+- Prepare features for further modeling
+
+_Result:_ A clean, analysis-ready dataset.
+
+## Key Observed Patterns
+
+| Factor | Observation | Interpretation |
+|---|---|---|
+| **Trip Length** | Reimbursement is **more generous** around **4–6 days**, declines for >7 days trips | Suggests a **sweet spot and long-trip penalty** |
+| **Mileage** | Value-per-mile decreases after ~100 miles/day | Indicates a **non-linear mileage adjustment curve** |
+| **Receipts** | Higher receipts do **not** consistently produce higher reimbursement | Suggests **diminishing returns and upper/lower spend penalties** |
+| **Non-linear Behavior** | Adjustments change together, not independently | Legacy system likely uses **multiple interacting rules** |
+| **Rounding Artifacts** | Some reimbursements show small irregularities | Suggests **bugs/features that must be preserved** |
+
+## Phase 1 Outcomes
+- We confirmed that the legacy system is **not linear**.
+- We identified meaningful candidate **derived features** for modeling:
+  - `miles_per_day`
+  - `spend_per_day`
+  - `log_miles`
+  - `efficiency` indicators (balanced trip behavior)
+- We created a consolidated **Business Logic Summary** aligning interview anecdotes with statistical evidence.
+
+## Transition to Phase 2
+Phase 2 will focus on translating these behavioral patterns into measurable features and establishing a baseline predictive model to approximate the legacy system.
+
+Specifically, Phase 2 will involve:
+
+1. Feature Engineering to capture observed effects such as efficiency sweet spots, diminishing mileage returns, and spend discipline.
+2. Training baseline regression models:
+   - Linear Regression (baseline reference)
+   - Ridge & Lasso Regression (feature stability and noise control)
+   - Polynomial Regression (to capture non-linear “sweet spot” effects)
+3. Evaluating how closely these models can approximate the legacy reimbursement output and identifying where linear models fail.
+
+The purpose of Phase 2 is to determine whether the system's behavior can be represented with smooth mathematical relationships, or whether we will require non-linear ensemble models (Phase 3) to fully replicate the rule interactions.
+
+
+---
+
+## Status
+**Phase 1 Completed.**  
+Proceeding to Feature Engineering & Baseline Modeling.
