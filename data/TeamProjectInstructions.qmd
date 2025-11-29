@@ -1,0 +1,387 @@
+---
+title: "CSCI/ DASC 6020: Machine Learning Team Project"
+author: "Your Name"
+date: today
+date-format: long
+number-sections: true
+number-depth: 2
+# jupyter: python3
+format:
+  html:
+    toc: true
+    toc-location: right
+    toc-title: "On this page"
+    number-sections: true
+    number-depth: 2
+    html-math-method: katex
+    embed-resources: true
+    # mermaid:
+      # theme: forest
+---
+
+This project is based on [Top Coder Challenge: Black Box Legacy Reimbursement System](https://github.com/8090-inc/top-coder-challenge/). The documents needed for this project are all available on this GitHub repository.
+
+# Legacy System Reverse Engineering Challenge
+
+This project provides students with a realistic, challenging machine learning problem that combines technical skills with business acumen, preparing them for real-world data science roles while meeting rigorous academic standards.
+
+Teams will reverse-engineer a 60-year-old travel reimbursement system using only historical data and employee interviews, applying machine learning techniques to discover hidden business logic patterns and create predictive models that replicate legacy system behavior.
+
+**Scenario**: Your team has been hired as ML consultants by ACME Corporation. Their legacy reimbursement system has been running for 60 years, no one knows how it works, but it is still used daily. A new system has been built, but the ACME Corporation is confused by the differences in results. Your mission is to use machine learning to understand the original business logic and create a model that can explain and predict the legacy system's behavior.
+
+# Project Learning Objectives
+
+By completing this project, students will:
+
+1. **Apply Supervised Learning**: Use regression and classification techniques to model complex business rules.
+
+2. **Feature Engineering**: Extract meaningful features from limited input variables.
+
+3. **Model Interpretability**: Develop explainable AI solutions for business stakeholders.
+
+4. **Data Analysis**: Perform comprehensive exploratory data analysis on real-world business data.
+
+5. **Ensemble Methods**: Combine multiple ML approaches to improve prediction accuracy.
+
+6. **Business Communication**: Present technical solutions to non-technical stakeholders.
+
+7. **Collaborative Development**: Work in teams using version control and agile methodologies.
+
+
+# Project Specification
+
+## Problem Statement
+
+**Input Variables** (provided by the legacy system):
+
+- `trip_duration_days`: Number of days spent traveling (integer)
+
+- `miles_traveled`: Total miles traveled (integer)  
+
+- `total_receipts_amount`: Total dollar amount of receipts (float)
+
+**Output Variable** (to predict):
+
+- Single numeric reimbursement amount (float, rounded to 2 decimal places)
+
+**Success Criteria**:
+
+- Exact matches: Cases within $\pm\$0.01$ of the expected output
+
+- Close matches: Cases within $\pm\$1.00$ of the expected output
+
+- Score: Lower is better (combines accuracy and precision)
+
+## Dataset Description
+
+1,000 historical input/output examples from `public_cases.json` is available. Create a random sample of 750 examples for use in training the machine learning models. The remaining 250 examples should be used for testing.
+
+**Additional Resources**:
+
+- Product Requirements Document (PRD) with business context ([available at https://github.com/8090-inc/top-coder-challenge/blob/main/PRD.md](https://github.com/8090-inc/top-coder-challenge/blob/main/PRD.md)).
+
+- Employee interview transcripts with system behavior hints ([available at https://github.com/8090-inc/top-coder-challenge/blob/main/INTERVIEWS.md](https://github.com/8090-inc/top-coder-challenge/blob/main/INTERVIEWS.md)).
+
+- Domain knowledge about travel reimbursement policies.
+
+# Technical Requirements
+
+## Phase 1: Exploratory Data Analysis (Week 1-2)
+
+**Deliverables:**
+
+1. **Data Exploration Report** (Jupyter notebook)
+
+   - Statistical summary of all input/output variables
+   - Distribution analysis and visualization
+   - Correlation analysis between inputs and outputs
+   - Outlier detection and analysis
+   - Missing data assessment
+
+2. **Business Logic Hypothesis** (Technical report)
+
+   - Analysis of PRD and interview transcripts
+   - Proposed business rules and logic patterns
+   - Feature importance hypotheses
+   - Potential non-linear relationships identification
+
+3. **Feature Engineering Strategy**
+
+   - Derived features (e.g., cost per mile, cost per day)
+   - Interaction terms and polynomial features
+   - Domain-specific transformations
+   - Feature scaling and normalization approaches
+
+## Phase 2: Model Development (Week 3-5)
+
+**Required ML Approaches** (teams must implement at least 4, choose across the categories):
+
+1. **Linear Regression Variants**
+
+   - Simple linear regression
+   - Ridge/Lasso regression with regularization
+   - Polynomial regression
+
+2. **Tree-Based Methods**
+
+   - Decision trees with interpretability analysis
+   - Random Forest with feature importance
+   - Gradient Boosting (XGBoost, LightGBM)
+
+3. **Advanced Techniques**
+
+   - Support Vector Regression
+   - Neural Networks (MLPs)
+   - Ensemble methods (stacking, voting)
+
+4. **Rule-Based Learning**
+
+   - Decision rule extraction
+   - Association rule mining
+   - Symbolic regression (optional bonus)
+
+**Model Evaluation Framework**:
+
+- Cross-validation strategies (time-series aware if applicable)
+- Multiple evaluation metrics (MAE, RMSE, accuracy within thresholds)
+- Overfitting detection and prevention
+- Model interpretability analysis
+
+### Phase 3: System Integration (Week 6-7)
+
+**Implementation Requirements**:
+
+1. **Production-Ready Code**
+
+   - Script must take exactly 3 parameters and output a single number
+   - Must run in under 5 seconds per test case
+   - Work without external dependencies (no network calls, databases, etc.)
+   - Error handling and input validation
+
+2. **Model Pipeline**
+
+   - Feature preprocessing pipeline
+   - Model ensemble or selection logic
+   - Post-processing and rounding logic
+   - Comprehensive testing framework
+
+3. **Documentation**
+
+   - Code documentation and comments
+   - Model architecture description
+   - Feature engineering rationale
+   - Deployment instructions
+
+## Phase 4: Business Communication (Week 8)
+
+**Final Deliverables**:
+
+1. **Technical Report** (15-20 pages)
+
+   - Executive summary for business stakeholders
+   - Methodology and approach description
+   - Model performance analysis and comparison
+   - Business insights and discovered patterns
+   - Recommendations for system improvement
+
+2. **Business Presentation** (20 minutes + Q&A)
+
+   - Problem context and approach
+   - Key findings and model insights
+   - Explanation of legacy system behavior
+   - Recommendations for SomeName, LLC.
+
+3. **Code Repository**
+
+   - Complete, documented codebase
+   - Reproducible analysis notebooks (Quarto/ RMarkdown)
+   - Model artifacts and evaluation results
+   - README with setup and usage instructions
+
+# Team Structure and Roles
+
+## Recommended Team Roles (3-4 members):
+
+**Data Scientist/Analyst**
+
+- Lead exploratory data analysis
+- Feature engineering and selection
+- Statistical analysis and hypothesis testing
+- Data visualization and reporting
+
+**ML Engineer**
+
+- Model development and optimization
+- Hyperparameter tuning and validation
+- Pipeline development and automation
+- Performance optimization
+
+**Business Analyst**
+
+- PRD and interview analysis
+- Domain expertise development
+- Business requirements translation
+- Stakeholder communication
+
+**Software Engineer** (for 4-person teams)
+
+- Production code development
+- Testing framework implementation
+- Deployment and integration
+- Code quality and documentation
+
+# Evaluation Criteria
+
+## Technical Performance (40%)
+
+- **Model Accuracy**: Prediction accuracy on test set
+- **Methodology**: Soundness of ML approach and evaluation
+- **Innovation**: Creative problem-solving and advanced techniques
+- **Code Quality**: Clean, documented, reproducible code
+
+## Business Understanding (25%)
+
+- **Problem Analysis**: Depth of business problem understanding
+- **Insight Generation**: Quality of discovered patterns and rules
+- **Interpretability**: Ability to explain model behavior
+- **Recommendations**: Practical business recommendations
+
+## Communication (20%)
+
+- **Technical Report**: Clarity, completeness, and professionalism
+- **Presentation**: Effective communication to business audience
+- **Documentation**: Quality of code and project documentation
+- **Collaboration**: Evidence of effective teamwork
+
+## Process and Methodology (15%)
+
+- **Project Management**: Adherence to timeline and deliverables
+- **Version Control**: Proper use of Git and collaborative development
+- **Reproducibility**: Ability for others to replicate results
+- **Ethical Considerations**: Discussion of model fairness and bias
+
+# Weekly Milestones
+
+## Week 1: Project Setup and Initial Analysis
+
+- Team formation and role assignment
+- Repository setup and data exploration
+- Initial PRD and interview analysis
+- Preliminary data insights presentation
+
+## Week 2: Feature Engineering and Baseline Models
+
+- Complete EDA report
+- Feature engineering implementation
+- Baseline model development
+- Business logic hypothesis document
+
+## Week 3-4: Advanced Model Development
+
+- Implementation of required ML approaches
+- Model comparison and evaluation
+- Hyperparameter optimization
+- Mid-project progress presentation
+
+## Week 5-6: Model Refinement and Ensemble
+
+- Ensemble method development
+- Model interpretability analysis
+- Production code implementation
+- Comprehensive testing
+
+## Week 7: Integration and Validation
+
+- Final model validation and testing
+- Performance optimization
+- Documentation completion
+- Practice presentation
+
+## Week 8: Final Presentation and Submission
+
+- Final business presentation
+- Technical report submission
+- Code repository finalization
+- Peer evaluation and reflection
+
+# Advanced Extensions (Bonus Points)
+
+## Interpretable AI Challenge
+
+- Implement SHAP or LIME for model interpretability
+- Develop custom visualization for business rule explanation
+- Create decision tree surrogate models
+- Extract symbolic rules from ensemble models
+
+## Time Series Analysis
+
+- Investigate temporal patterns in reimbursement policies
+- Implement time-aware cross-validation
+- Analyze policy changes over the 60-year period
+- Develop change-point detection algorithms
+
+## Automated Machine Learning
+
+- Implement automated feature selection
+- Develop automated model selection pipeline
+- Create automated hyperparameter optimization
+- Build ensemble model selection framework
+
+## Business Intelligence Dashboard
+
+- Create interactive dashboard for business users
+- Implement real-time prediction interface
+- Develop what-if scenario analysis tools
+- Build model performance monitoring system
+
+# Resources and Support
+
+## Technical Resources
+
+- Course lecture materials on supervised learning (ECU Canvas)
+- Scikit-learn, XGBoost, and TensorFlow documentation (On the Web)
+- Jupyter notebook templates and examples
+- Sample code for model evaluation and interpretation
+
+## Business Context
+
+- Travel and expense management industry resources
+- Corporate reimbursement policy examples
+- Business analysis and requirements gathering guides
+- Stakeholder communication best practices
+
+## Collaboration Tools
+
+- GitHub repository templates
+- Slack workspace for team communication (or any other tool such as Jira, Taiga)
+- Peer review and feedback sessions
+
+# Assessment Rubric
+
+## Excellent (A): 90-100%
+
+- Exceptional model performance with innovative approaches
+- Comprehensive business analysis with actionable insights
+- Professional-quality code and documentation
+- Outstanding presentation and communication skills
+
+## Good (B): 80-89%
+
+- Strong model performance with sound methodology
+- Good business understanding with relevant insights
+- Well-organized code and adequate documentation
+- Clear presentation with minor areas for improvement
+
+## Satisfactory (C): 70-79%
+
+- Acceptable model performance with basic approaches
+- Basic business understanding with limited insights
+- Functional code with minimal documentation
+- Adequate presentation meeting basic requirements
+
+## Needs Improvement (D/F): Below 70%
+
+- Poor model performance or flawed methodology
+- Limited business understanding or insights
+- Incomplete or non-functional code
+- Poor presentation or communication
