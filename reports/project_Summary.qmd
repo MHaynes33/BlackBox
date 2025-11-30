@@ -21,9 +21,32 @@ ACME's legacy reimbursement engine has operated as a black box for decades. Our 
 ## Executive Overview
 We are reverse-engineering ACME's legacy reimbursement engine to match and explain its outputs. This report summarizes progress across three phases: initial discovery and behavioral hypotheses, feature engineering with baseline models, and correlation-driven insights to guide next modeling steps. The aim is to balance technical rigor with business clarity while preserving legacy artifacts (tiering, rounding quirks) that stakeholders care about.
 
-```{=typst}
-#pagebreak()
-```
+## Dataset Reviewed
+The dataset includes 6,000 records (1,000 public with reimbursement labels and 5,000 unlabeled private cases).
+We examined the historical reimbursement dataset, which includes:
+
+- **Trip Duration (days)**
+- **Total Mileage**
+- **Total Receipts**
+- **Reimbursement Amount** (system output)
+
+A data cleaning notebook was created to:
+- Remove formatting inconsistencies
+- Validate numeric ranges
+- Prepare features for further modeling
+
+_Result:_ A clean, analysis-ready dataset.
+
+## Key Observed Patterns
+
+| Factor | Observation | Interpretation |
+|---|---|---|
+| **Trip Length** | Reimbursement is **more generous** around **4–6 days**, declines for >7 days trips | Suggests a **sweet spot and long-trip penalty** |
+| **Mileage** | Value-per-mile decreases after ~100 miles/day | Indicates a **non-linear mileage adjustment curve** |
+| **Receipts** | Higher receipts do **not** consistently produce higher reimbursement | Suggests **diminishing returns and upper/lower spend penalties** |
+| **Non-linear Behavior** | Adjustments change together, not independently | Legacy system likely uses **multiple interacting rules** |
+| **Rounding Artifacts** | Some reimbursements show small irregularities | Suggests **bugs/features that must be preserved** |
+
 ## Phase 1 - Discovery, Data Quality, and Business Logic Hypotheses
 
 ### Goal
@@ -106,33 +129,117 @@ plt.show()
 #pagebreak()
 ```
 ## Phase 2 - Feature Engineering and Baseline Modeling
-**Feature design (behavioral intent)**
-- cost_per_day: Lodging/meal intensity per day; flags expensive daily burn.
-- cost_per_mile: Spend per mile; highlights route efficiency.
-- miles_per_day: Pace of itinerary; proxies route type and overnight needs.
-- cost_ratio (cost_per_day / cost_per_mile): Balance between lodging vs. mileage costs; captures spend discipline.
 
-**Data handling**
-- Guarded divides by zero, replaced inf/NaN, and retained rows after cleaning. IQR checks on original and derived features required no exclusions. Baseline split used a 75/25 train/test partition.
+### Goal
+Translate Phase 1 behavioral findings into engineered efficiency features and measure how well simple baselines approximate the legacy engine.
 
-**Models evaluated**
-- Linear Regression (baseline interpretability).
-- Ridge and Lasso (regularized linear) to stabilize coefficients.
-- Polynomial Regression (degree 2) to capture curvature and interactions among duration, miles, receipts, and efficiency terms.
+### What we did
+- Engineered rate and balance features: cost_per_day, cost_per_mile, miles_per_day, cost_ratio (cost_per_day / cost_per_mile).
+- Guarded divides by zero, replaced inf/NaN, confirmed IQR checks required no row drops; used a 75/25 train/test split.
+- Trained baseline models: Linear, Ridge, Lasso, and Polynomial (degree 2) on the seven engineered features.
 
-**Findings**
-- Polynomial regression delivered the strongest fit (highest R2, lowest error), reinforcing the need for non-linear terms to mimic tiered mileage and diminishing spend effects.
-- Ridge/Lasso performed close to the linear baseline with improved stability, suggesting modest collinearity but no severe overfitting.
-- Engineered efficiency features retained signal value after cleaning, supporting their inclusion in interaction-rich models.
-- The tapering and interaction patterns visible in Phase 1 visuals (skewed receipts, mileage tiering) motivate moving beyond linear models to methods that learn non-linear boundaries directly.
+### Key evidence
+- Correlations with reimbursement: receipts (~0.70) strongest; trip duration (~0.51) and miles traveled (~0.43) moderate; rate features are weak alone but help via interactions.
+- Model fit: Linear/Ridge/Lasso R^2 ~0.78 with RMSE ~200; Polynomial R^2 ~0.89 with RMSE ~142, showing non-linear terms are needed.
+- Residuals for the polynomial model center near zero with a few long-tail trips driving the extremes, consistent with the skew observed in Phase 1.
 
-**Risks and gaps**
-- Single train/test split only; no cross-validation or holdout robustness yet.
-- Tree/ensemble models have not been run; hyperparameters remain at defaults.
-- Business thresholds (within $0.01 / within $1.00) not yet reported.
+### Takeaway (business view)
+Linear structure covers much of the variance, but the legacy engine's tiering and diminishing-return behavior needs non-linear interactions. The engineered efficiency features add signal when combined non-linearly; regularization keeps coefficients stable.
 
-**Phase 2 takeaway**
-Linear structure explains much of the variance, but non-linear terms are needed to emulate the legacy system's tiering and diminishing-return behavior. Regularization helps stability; richer non-linear models are the logical next step.
+### Phase 2 visuals
+
+The charts below mirror the Phase 1 layout:
+- Correlation heatmap across engineered features and reimbursement.
+- Baseline model fit (R^2) comparison.
+- Actual vs predicted for the best baseline model (polynomial degree 2).
+
+```{python}
+#| echo: false
+#| warning: false
+#| message: false
+#| fig-width: 6
+#| fig-height: 9
+#| fig-align: "center"
+#| label: fig-phase2-key-visuals
+#| fig-cap: "Phase 2 visuals: engineered feature correlations, model fit comparison, and polynomial predictions."
+
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
+from sklearn.linear_model import LinearRegression, Ridge, Lasso
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.pipeline import make_pipeline
+from sklearn.metrics import r2_score, mean_squared_error
+from math import sqrt
+
+plt.rcParams["font.family"] = ["DejaVu Sans", "Arial"]
+
+# Load engineered dataset (works from project root or reports/)
+try:
+    df = pd.read_csv("data/phase2_features_baseline_models.csv")
+except FileNotFoundError:
+    df = pd.read_csv("../data/phase2_features_baseline_models.csv")
+
+features = [
+    "trip_duration_days",
+    "miles_traveled",
+    "total_receipts_amount",
+    "cost_per_day",
+    "cost_per_mile",
+    "miles_per_day",
+    "cost_ratio",
+]
+target = "reimbursement"
+
+X = df[features]
+y = df[target]
+
+split = int(0.75 * len(df))
+X_train, X_test = X[:split], X[split:]
+y_train, y_test = y[:split], y[split:]
+
+lin = LinearRegression().fit(X_train, y_train)
+ridge = Ridge(alpha=1.0).fit(X_train, y_train)
+lasso = Lasso(alpha=0.01).fit(X_train, y_train)
+poly = make_pipeline(PolynomialFeatures(degree=2, include_bias=False), LinearRegression()).fit(X_train, y_train)
+
+preds = {
+    "Linear": lin.predict(X_test),
+    "Ridge": ridge.predict(X_test),
+    "Lasso": lasso.predict(X_test),
+    "Poly (deg=2)": poly.predict(X_test),
+}
+
+metrics = []
+for name, pred in preds.items():
+    metrics.append({
+        "model": name,
+        "r2": r2_score(y_test, pred),
+        "rmse": sqrt(mean_squared_error(y_test, pred)),
+    })
+
+metric_df = pd.DataFrame(metrics).sort_values("r2", ascending=False)
+
+fig, axes = plt.subplots(3, 1, figsize=(6, 10))
+
+corr = df[features + [target]].corr()
+sns.heatmap(corr, annot=True, fmt=".2f", cmap="YlGnBu", ax=axes[0])
+axes[0].set_title("Correlation across engineered features and reimbursement")
+
+sns.barplot(data=metric_df, x="model", y="r2", palette="crest", ax=axes[1])
+axes[1].set_ylim(0, 1)
+axes[1].set_ylabel("R^2")
+axes[1].set_title("Model fit (R^2)")
+
+sns.scatterplot(x=y_test, y=preds["Poly (deg=2)"], color="teal", alpha=0.7, ax=axes[2])
+axes[2].plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], "r--", linewidth=1)
+axes[2].set_xlabel("Actual reimbursement")
+axes[2].set_ylabel("Predicted reimbursement (Poly deg=2)")
+axes[2].set_title("Actual vs predicted (best baseline model)")
+plt.tight_layout()
+plt.show()
+
+```
 
 ---
 
