@@ -1,0 +1,194 @@
+---
+title: "Replicating ACME Corporation's Legacy System Behavior"
+format: html
+editor: visual
+---
+
+## Goal: Reverse engineer ACME's legacy reimbursemenet engine using machine learning, statistical analysis, and business reasoning with high accuracy and interpretability.
+
+## Team Members and Role
+
+**Ayushi Bohra**: Technical Lead/Machine Learning Engineer\|Leads feature engineering, modeling approach, and code structure. Ensures model reproducibility and pipeline design.
+
+**Colyn Martin**: Documentation & Communication Lead\| Format final reports, slide design, final written outputs, and ensures clarity of deliverables.
+
+**Mike Haynes**: Business Analyst\| Interprets interview insights and PRD context, aligns findings to business logic, writes narrative justification for modeling decisions.
+
+**Matthew Fernald**: Quality Analyst / Tester / Data Wrangler \| Validates dataset integrity, performs spot-checks on model outputs, tests edge cases, and verifies correctness before submission.
+
+### Data Given for the Project:
+
+[Private Cases Dataset](https://github.com/MHaynes33/BlackBox/blob/main/data/private_cases.json)
+
+details: 5000 rows, 3 columns (Trip Duration, Total Mileage, & Total Receipts)
+
+[Public Cases Dataset](https://github.com/MHaynes33/BlackBox/blob/main/data/public_cases.json)
+
+details: 1000 rows, 4 columns (Trip Duration, Total Mileage, Total Receipts, & Reimbursement Amount)
+
+## What Happened During Phase 1: Exploratory Data Analysis (Week 1-2)
+
+**\~ Aim:** Understand the structure and quality of the public/private reimbursement datasets and synthesize statistical patterns along with interview insights to form a testable hypothesis of the ACME legacy system’s reimbursement rules.
+
+### What We Did (Technical Work Completed)
+
+### **Data ingestion & formatting**
+
+-   Flattened the `public_cases` and `private_cases` JSON files into clean tabular datasets.
+-   Combined datasets into a unified **6,000-row table** (with reimbursement missing for private cases, as expected).
+
+### **Data quality validation**
+
+-   Checked for missing values, duplicates, and non-positive values in:
+    -   `trip_duration_days`
+    -   `miles_traveled`
+    -   `total_receipts_amount`
+    -   `reimbursement`\
+        ➝ **No corrections required.**
+
+### **Range validation**
+
+-   Confirmed all variables fell within realistic travel cost and duration ranges.
+-   No negative, unrealistic, or inconsistent entries were found.
+
+### **Outlier detection**
+
+-   Applied **1.5×IQR** method across all numeric features.
+-   **Zero statistical outliers** detected in both public and private datasets.
+
+*To access the code to replicate and review the validation and outlier detection of the datasets* *Review this file*: [Data Validation and Outlier Detection](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/week1_data_cleaning.ipynb)
+
+### **Descriptive statistics & comparison**
+
+-   Generated summary statistics for the public, private, and combined datasets.
+-   Compared means, distributions, and variances to check for domain drift.\
+    ➝ **Public and private datasets align strongly**, making combined training appropriate.
+
+### **Visualized the Stastical Analysis of the Given Dataset**
+
+-   Correlation heatmap
+-   Distributions for receipts, mileage, and duration
+-   Public vs private comparison boxplots
+-   Trend and interaction examinations
+
+#### Key Generated Visuals & Their Interpretations
+
+-   **Correlation:** receipts and miles dominate; duration contributes modestly.
+
+![](images/clipboard-2882550011.png)
+
+-   **Receipts distribution:** heavy right skew → diminishing returns → supports nonlinear logic.
+
+    ![](images/clipboard-3138852083.png)
+
+-   **Public vs private:** overlapping patterns confirm shared reimbursement behavior.
+
+    ![](images/clipboard-899301835.png)
+
+*To access the code to replicate and review the detailed statistical analysis of the given dataset and the plots associated with it* *Review this file*: [Dataset Statistical Analysis and Plots](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/01_EDA_Reimbursement%20(3).ipynb)
+
+### **Business Logic Summary Through PRD & Interview Integration**
+
+To complement the statistical insights gathered from data analysis, the interviews provided critical context about how ACME’s legacy reimbursement engine behaves in practice. These interviews highlighted several non-linear rules, thresholds, and behavioral quirks that are not visible from raw data alone but help explain the patterns observed during analysis.
+
+#### **Key Behavioral Patterns Identified**
+
+-   **Duration Effects**\
+    Interviews emphasized a “sweet spot” around 4–6 days, with special uplift for 5-day trips and penalties for extended trips (\>7 days).\
+    This aligns with the statistical data, which showed diminishing influence of trip duration for longer trips.
+
+-   **Mileage Curve**\
+    Stakeholders described tiered mileage, peaks around 180–220 miles/day, and penalties for extremely high mileage.\
+    This is supported by strong correlations and right-skewed mileage distributions.
+
+-   **Receipt Non-Linearity**\
+    Interviews confirmed diminishing returns on high spending and penalties for unusually low spend.\
+    This mirrors the observation that receipts drive reimbursement strongly but non-linearly.
+
+-   **Efficiency Bonuses**\
+    Balanced trips (moderate duration, moderate mileage, reasonable spend) receive bonuses.\
+    This explains why mid-range trips in the data show stronger, smoother relationships.
+
+-   **Department Biases & Memory Effects**\
+    Interviewees referenced legacy departmental weighting and historical penalty/log-based behavior.\
+    These cannot be seen in the datasets alone but inform feature engineering for later phases.
+
+-   **Rounding & Randomness**\
+    Unique rounding behaviors (.49 / .99 endings) and ±5–10% pseudo-random adjustments were reported.\
+    These insights indicate that some observed variance in reimbursement cannot be fully explained using deterministic features.
+
+#### **Resulting Business Logic Hypotheses**
+
+1.  The legacy engine is not purely linear and likely uses tiered or threshold-based adjustments.\
+2.  Balanced mid-length trips receive the most favorable treatment.\
+3.  High or low spending receives penalties; optimal spending sits between \$75–\$120/day.\
+4.  Mileage has nonlinear scaling with a performance peak around 180–220 miles/day.\
+5.  Department weighting and historical “profile memory” impact reimbursement.\
+6.  A curved spend response centered around \~\$700 per trip explains mid-range peaks.\
+7.  Stochastic noise is intentionally added to prevent predictability.
+
+*To access the detailed review of the business logic summary using discovery interviews*: [Business Logic Summary](https://github.com/MHaynes33/BlackBox/blob/main/reports/Business_logic_summary.html)
+
+#### **Why This Matters for Modeling**
+
+The combined findings from the statistical analysis of the given data sets and interviews indicate that: - Simple linear models cannot fully capture ACME’s logic, especially at edges of spend, duration, and mileage. Non-linear models will likely reflect the system’s rule-based behavior more accurately. Feature engineering must explicitly encode thresholds, ratios, efficiency scores, and interaction effects to approximate the engine’s hidden formulas.
+
+Together, the statistical patterns and interview insights guided the development of our Phase 2 feature engineering plan and baseline modeling strategy.
+
+### **Early hypothesis formation**
+
+-   Identified core predictors and emerging nonlinear patterns influencing reimbursement.
+-   Formed preliminary business logic assumptions for Phase 2 modeling.
+
+------------------------------------------------------------------------
+
+## Key Evidence Identified (Statistical Insights)
+
+### **Trip Duration**
+
+-   Concentrated around **1–5 days**, with a smaller tail up to 14 days.
+-   Moderate correlation with reimbursement (**r ≈ 0.45**).\
+    ➝ Duration influences payouts but is *not* the main driver.
+
+### **Miles Traveled**
+
+-   Right-skewed; most trips under \~500 miles.
+-   Strong correlation with reimbursement (**r ≈ 0.80**).\
+    ➝ Mileage is a **primary cost determinant**.
+
+### **Receipts / Total Spend**
+
+-   Strongest relationship with reimbursement (**r ≈ 0.85**).
+-   Long right tail suggests **diminishing returns** at high spending levels.\
+    ➝ Receipts drive reimbursement but indicate **nonlinear scaling**.
+
+### **Public vs Private Dataset Alignment**
+
+-   Nearly identical means, ranges, and shapes across features.
+-   Only slight variance differences.\
+    ➝ **No domain drift**, combined modeling is statistically sound.
+
+------------------------------------------------------------------------
+
+## Phase 1 Takeaway (Business Perspective)
+
+The ACME legacy reimbursement engine appears to reward **balanced, mid-length trips** with reasonable mileage and disciplined spending.\
+The system is **not strictly linear** instead, it likely uses tiered mileage rules, diminishing-return curves for receipts, and capped adjustments for unusually long or expensive trips.
+
+This explains why public/private datasets align closely and why simple linear models capture much but not all of the historic behavior.
+
+------------------------------------------------------------------------
+
+## Phase 1 Conclusion
+
+Phase 1 established:
+
+-   A clean, validated dataset\
+-   No data quality obstacles\
+-   Clear statistical drivers of reimbursement\
+-   Evidence of underlying nonlinear business logic\
+-   Hypotheses to test through baseline modeling and feature engineering
+
+The dataset is now ready for **Phase 2: Feature Engineering and Baseline Modeling**, where these hypotheses will be encoded into derived features to replicate the legacy engine’s behavior.
+
+------------------------------------------------------------------------
