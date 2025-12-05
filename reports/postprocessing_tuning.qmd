@@ -1,0 +1,51 @@
+﻿---
+title: "Post-processing Tuning Notes"
+format:
+  typst-pdf:
+    template-partials:
+      - typst-show.typ
+      - typst-template.typ
+---
+
+## Goal
+Raise close/exact hit rates (<= $0.01 and <= $1) by layering legacy-style rules on top of the Phase 3 stacking ensemble, while tracking the impact of each change.
+
+## Technical detail
+
+### Variants and metrics (75/25 holdout, 250 test rows)
+
+| Variant | Description | MAE | RMSE | R^2 | Within $0.01 | Within $1 |
+| --- | --- | --- | --- | --- | --- | --- |
+| A: Raw model | predictions only (no post-processing) | 62.24 | 94.79 | 0.9514 | 0.0000 | 0.0160 |
+| B: Post-proc v1 | Heuristic tiers (0.10/0.08/0.05 per mile bands), duration tweaks (-10/+15), receipts penalty 0.02 over 2000 | 69.03 | 102.71 | 0.9430 | 0.0000 | 0.0120 |
+| C: Calibrated + softened tiers | Linear calibration (a=11.13, b=0.994) + softer tiers (0.06/0.04/0.03), duration tweaks (-5/+10), receipts penalty 0.01 over 2000 | 64.91 | 97.78 | 0.9483 | 0.0000 | 0.0040 |
+| D: Bucket-adjusted offsets | Raw model + train-derived residual offsets by miles/receipts/duration buckets | 62.76 | 97.99 | 0.9481 | 0.0000 | 0.0120 |
+
+**Best so far:** Variant A (raw stack) — MAE 62.24, RMSE 94.79, R^2 0.9514, Within $0.01 = 0.0%, Within $1 = 1.6%. Other tweaks reduced close/exact without improving overall error.
+
+### Running notes (what we tried, why it lagged, how we adjusted)
+- Rule/feature expansion attempts
+  - Added rule-based bucket flags (duration/miles/receipts/cost buckets and interactions), residual gradient-boost calibration on stack residuals, PRD-inspired features, random splits, surrogate tree, voting regressor, kNN (scaled), SVR/MLP, and a tier classifier over payout buckets.
+  - Outcome: Overall accuracy stayed good, but close/exact rates did not improve; combined system noted as worse than best baseline.
+- Retrain (stack with regularized base learners)
+  - What: DT depth 6, RF 400 trees depth 16, GB 2000 estimators with early-stopping; saved as `src/final_model_rules.pkl`.
+  - Outcome: Baseline best MAE/RMSE and within-$1 so far, but close/exact still low (0% / 1.6%).
+- Post-proc v1 (broad tiers/duration/penalty)
+  - What: Mileage bumps 0.10/0.08/0.05; duration tweaks -10/+15; penalty 0.02 beyond receipts > 2000.
+  - Why it lagged: MAE/RMSE worsened; within-$1 dropped to 1.2%; within-$0.01 stayed 0%.
+  - Adjustment: Soften coefficients and add calibration.
+- Calibration + softened tiers
+  - What: Linear calibration (a=11.13, b=0.994); mileage bumps 0.06/0.04/0.03; duration tweaks -5/+10; penalty 0.01 beyond receipts > 2000.
+  - Why it lagged: MAE/RMSE improved vs v1 but within-$1 fell to 0.4%; within-$0.01 still 0%.
+  - Next remedy: derive bucket-specific offsets (duration/miles/receipts buckets) from residuals instead of broad heuristics.
+- Bucket-adjusted offsets (Variant D)
+  - What: Compute mean residuals on train by miles/receipts/duration buckets; add those offsets to raw model predictions.
+  - Outcome: MAE/RMSE slightly higher than raw; within-$1 = 1.2%, within-$0.01 = 0.0% (no lift vs raw). Broad bucket offsets did not improve close/exact.
+- Raw vs post-processed takeaway
+  - Raw (no post-processing) still has the best within-$1 among tried variants; broad heuristics/offsets have not lifted close/exact counts. Need more targeted, residual-driven adjustments.
+
+## Business summary (executive view)
+- Problem: ensure the modern system aligns with legacy payouts at penny/dollar precision, not just in overall trend.
+- What we did: tested business-like adjustments after the model (tiers/caps, calibration, bucket offsets) and richer feature/model mixes. Overall accuracy stayed strong.
+- Outcome: exact and near-exact matches barely moved; broad tweaks didn’t recreate the legacy system’s step-like payout behavior.
+- Implication: we can explain and compare payouts at a high level, but penny/dollar fidelity remains low. Closing that gap will require more precise, rule-like steps or an agreed tolerance band when comparing legacy vs. new.
