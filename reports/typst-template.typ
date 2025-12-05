@@ -5,8 +5,6 @@
   // The book's author.
   author: "Author",
 
-  // The book's author.
-
   // The paper size to use.
   paper: "a4",
   
