@@ -41,11 +41,11 @@ The resulting model achieves **high predictive accuracy (\~0.95 R²)** while mai
 
 Goal:
 
-_Advance beyond Phase 2 polynomial baselines by evaluating nonlinear and
+*Advance beyond Phase 2 polynomial baselines by evaluating nonlinear and
 ensemble modeling strategies capable of capturing ACME’s tiered, nonlinear,
 and diminishing-return reimbursement logic. Phase 3 introduces a structured
 modeling pipeline, evaluates individual nonlinear regressors, integrates PRDdriven business logic features, and develops a calibrated stacking ensemble
-that most closely replicates ACME’s 60-year-old legacy system.
+that most closely replicates ACME’s 60-year-old legacy system.*
 
 **Models Trained**
 
