@@ -29,11 +29,11 @@ The resulting model achieves **high predictive accuracy (\~0.95 R²)** while mai
 
 ## III. Phase by Phase Workflow Summary
 
-### Phase 1
+### Phase 1: Discovery, Data Quality, and Business Logic Hypothesis Formation
 
 **Technology Used**
 
-### Phase 2
+### Phase 2: Feature Engineering and Baseline Modeling
 
 **Technology Used**
 
@@ -100,7 +100,8 @@ The stacking ensemble provides the most accurate and business-aligned reconstruc
 
 **Technical Tools Used**
 
-### Phase 4
+### Phase 4: Model Interpretability & Feature-Impact
+
 
 **Technology Used**
 
