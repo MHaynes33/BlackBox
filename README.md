@@ -27,7 +27,7 @@ The resulting model achieves **high predictive accuracy (\~0.95 R²)** while mai
 
 ## II. Repository Structure (work in progress)
 
-## 3. Phase by Phase Workflow Summary
+## III. Phase by Phase Workflow Summary
 
 ### Phase 1
 
@@ -37,9 +37,68 @@ The resulting model achieves **high predictive accuracy (\~0.95 R²)** while mai
 
 **Technology Used**
 
-### Phase 3
+### Phase 3: Modeling Outlook & Integration Plan
 
-**Technology Used**
+Goal:
+
+_Advance beyond Phase 2 polynomial baselines by evaluating nonlinear and
+ensemble modeling strategies capable of capturing ACME’s tiered, nonlinear,
+and diminishing-return reimbursement logic. Phase 3 introduces a structured
+modeling pipeline, evaluates individual nonlinear regressors, integrates PRDdriven business logic features, and develops a calibrated stacking ensemble
+that most closely replicates ACME’s 60-year-old legacy system.
+
+**Models Trained**
+
+Decision Tree
+
+Random Forest
+
+Gradient Boosting
+
+Support Vector Regression (SVR)
+
+MLP Neural Network
+
+Stacking Ensemble (Final Model)
+
+#### Model Performance
+
+| Model              | MAE    | RMSE    | R²      |
+|--------------------|--------|---------|---------|
+| Decision Tree      | 113.02 | 173.45  | 0.8561  |
+| Random Forest      | 72.98  | 110.01  | 0.9421  |
+| Gradient Boosting  | 72.09  | 109.71  | 0.9424  |
+| SVR                | 93.26  | 136.25  | 0.9112  |
+| MLP Neural Net     | 134.88 | 177.22  | 0.8498  |
+| **Stacking Ensemble** | **66.56** | **102.34** | **0.9499** |
+
+#### Granular Hit Rates
+
+~0% within $0.01
+
+~1.6% within $1.00
+
+_ACME’s legacy engine adds random cent-level noise, making exact matches impossible._
+
+#### Business Alignment
+
+~ Trees capture threshold rules → like internal ACME policy.
+
+~ Boosting models stacked exceptions → like decades of patches.
+
+~ SVR/MLP capture smooth diminishing-return curves → matching spend patterns.
+
+~ Stacking Ensemble combines all rule behaviors → closest to ACME’s logic.
+ 
+#### Phase 3 Outcome
+
+The stacking ensemble provides the most accurate and business-aligned reconstruction of ACME’s historical reimbursement behavior.
+
+#### Phase 3 Relevant Sources:
+
+**Files Relvant to this Phase**
+
+**Technical Tools Used**
 
 ### Phase 4
 
