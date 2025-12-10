@@ -150,17 +150,14 @@ that most closely replicates ACME’s 60-year-old legacy system.*
 
 **Models Trained**
 
-Decision Tree
+1. **Decision Tree**
+2. **Random Forest**
+3. **Gradient Boosting**
+4. **Support Vector Regression (SVR)**
+5. **MLP Neural Network**
+6. **Stacking Ensemble (Final Model)**
 
-Random Forest
-
-Gradient Boosting
-
-Support Vector Regression (SVR)
-
-MLP Neural Network
-
-Stacking Ensemble (Final Model)
+---
 
 #### Model Performance
 
