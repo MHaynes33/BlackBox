@@ -501,6 +501,203 @@ After completing all three components, you will have:
 Phase 1 ensures that the raw ACME datasets, their statistical properties,  
 and their business context are fully understood before building models in Phase 2.
 
+________________
+
+# Phase 2 (working on this)
+
+Phase 2 transforms the Phase-1 cleaned dataset into newly engineered features and trains baseline models to establish a performance benchmark.
+
+Every key step below corresponds to a specific notebook:
+
+| Step | Notebook |
+|------|----------|
+| Load/Validate Data | **Notebooks/02_Feature_Engineering_and_Baseline_Model.ipynb** |
+| Engineer Features | **Notebooks/02_Feature_Engineering_and_Baseline_Model.ipynb** |
+| Outlier & Distribution Checks | **Notebooks/02_Feature_Engineering_and_Baseline_Model.ipynb** |
+| Correlation & Driver Analysis | **Notebooks/Feature Correlation and Visualization.ipynb** |
+| Baseline Modeling (Linear → Polynomial) | **Notebooks/02_Feature_Engineering_and_Baseline_Model.ipynb** |
+| Performance Evaluation & Limits | **Notebooks/Performance Summary.ipynb** |
+| Data Output for Phase 3 | **Generated file: data/phase2_features_baseline_models.csv** |
+
+*This structure ensures complete traceability across the workflow.*
+
+---
+
+# 1. Loading & Validating the Clean Dataset  
+**Notebook:** `Notebooks/02_Feature_Engineering_and_Baseline_Model.ipynb`
+
+Phase 2 begins by loading the Phase-1 output:
+
+The notebook:
+
+- inspects the dataset shape  
+- checks for missing values  
+- confirms that only **public cases (N=1000)** contain labels  
+- verifies that cleaned variables remain consistent after Phase-1 wrangling  
+
+**Purpose:** Ensure that the dataset is ready for transformation and modeling.
+
+---
+
+# 2. Engineering Derived Features  
+**Notebook:** `Notebooks/02_Feature_Engineering_and_Baseline_Model.ipynb`
+
+The following metrics were engineered inside this notebook:
+
+| Feature | Formula | Why It Was Created |
+|--------|---------|---------------------|
+| `cost_per_day` | receipts ÷ days | captures spending intensity per day |
+| `cost_per_mile` | receipts ÷ miles | measures efficiency relative to distance |
+| `miles_per_day` | miles ÷ days | captures travel pace |
+| `cost_ratio` | cost_per_day ÷ cost_per_mile | relationship between spending patterns |
+
+These features were then:
+
+- cleaned for zero-division issues  
+- purged of NaN/infinite values  
+- validated with descriptive statistics  
+
+**Purpose:** Add behavioral dimensions that raw columns cannot capture.
+
+---
+
+# 3. Outlier Detection & Feature Distribution Analysis  
+**Notebook:** `Notebooks/02_Feature_Engineering_and_Baseline_Model.ipynb`
+
+Using IQR-based outlier detection, the notebook checks:
+
+- trip duration  
+- miles traveled  
+- receipts  
+- engineered features  
+
+Summary:
+
+- No extreme anomalies in core input features  
+- Right-skewed patterns appear in cost metrics (expected business behavior)  
+- Distributions confirm stability of engineered features  
+
+**Purpose:** Ensure engineered features do not introduce distortions harmful to modeling.
+
+---
+
+# 4. Preparing the Modeling Dataset  
+**Notebook:** `Notebooks/02_Feature_Engineering_and_Baseline_Model.ipynb`
+
+Seven numerical input features are selected:
+~trip_duration_days
+~miles_traveled
+~total_receipts_amount
+~cost_per_day
+~cost_per_mile
+~miles_per_day
+~cost_ratio
+Target: reimbursement
+
+The notebook applies a **deterministic 75/25 split** (first 750 rows → train; next 250 → test).
+
+**Purpose:** Maintain reproducibility and align with instructor expectations.
+
+---
+
+# 5. Baseline Model Development  
+**Notebook:** `Notebooks/02_Feature_Engineering_and_Baseline_Model.ipynb`
+
+The notebook fits four baseline models:
+
+## 5.1 Linear Regression  
+- Serves as the baseline for comparison  
+- Achieves ~0.784 R²  
+- Confirms strong linear influence of receipts, miles, and duration  
+
+## 5.2 Ridge Regression  
+- Adds L2 regularization  
+- Similar performance to Linear Regression  
+- Demonstrates feature stability  
+
+## 5.3 Lasso Regression  
+- Adds L1 regularization  
+- Does not eliminate features (all contribute)  
+
+## 5.4 Polynomial Regression (Degree 2)  
+- Introduces nonlinear interactions (e.g., miles × receipts)  
+- Achieves **highest R² (~0.892)**  
+- Indicates ACME’s true logic is nonlinear, tiered, or multiplicative  
+
+**Purpose:** Establish a baseline understanding of how much variance can be captured before adding Phase-3 business logic.
+
+---
+
+# 6. Feature Correlation & Importance Analysis  
+**Notebook:** `Notebooks/Feature Correlation and Visualization.ipynb`
+
+This notebook conducts:
+
+- correlation heatmap visualization  
+- top-driver ranking  
+- coefficient analysis using a linear model  
+
+Key findings:
+
+- `total_receipts_amount` = strongest predictor  
+- `miles_traveled` and `trip_duration_days` = meaningful contributors  
+- engineered features have low linear correlation but become important in nonlinear models  
+- polynomial modeling’s success is consistent with observed nonlinear structure  
+
+**Purpose:** Identify influential drivers and guide which nonlinear interactions matter in Phase 3.
+
+---
+
+# 7. Performance Evaluation & Limitations  
+**Notebook:** `Notebooks/Performance Summary.ipynb`
+
+This notebook evaluates:
+
+- MAE  
+- RMSE  
+- R²  
+- Exact-match rate  
+- Within-$1 and within-$5 accuracy  
+
+Findings:
+
+- R² is high (≈ 0.89), confirming strong behavioral approximation  
+- Exact-match rate and close-match rate are extremely low  
+- Indicates **the legacy system contains explicit rules**, such as:
+  - thresholds  
+  - nonlinear steps  
+  - rounding artifacts  
+  - bonuses/penalties  
+
+**Purpose:** Show where machine learning fails, motivating Phase-3 logic engineering.
+
+---
+
+# 8. Output for Phase 3  
+**File Generated By Notebook:**  
+`Notebooks/02_Feature_Engineering_and_Baseline_Model.ipynb`
+
+Output dataset: data/phase2_features_baseline_models.csv
+
+
+This file becomes the **official Phase-3 modeling input**, enriched with engineered features and validated for stability.
+
+---
+
+# 9. What's done during Phase 2:  
+Phase 2 successfully:
+
+- transformed raw data into a structured, behavior-rich ABT  
+- engineered features aligned with cost, duration, and efficiency patterns  
+- validated those features through distribution and outlier checks  
+- established linear and nonlinear baseline models  
+- demonstrated that complex, nonlinear interactions are required  
+- revealed the limits of ML-only modeling  
+- produced the enriched dataset for Phase 3  
+- highlighted the need to integrate PRD and interview-driven reimbursement logic  
+
+By the end of Phase 2, the team had a validated feature set, baseline models, and the analytical insight required to begin reconstructing ACME’s hidden business rules in Phase 3.
+
 
 ## 5. Key Findings
 
