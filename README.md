@@ -504,8 +504,7 @@ and their business context are fully understood before building models in Phase 
 
 ## 5. Key Findings
 
-## 6. Acknowledgements
 
-## 7. Final Notes (work on this)
+## 6. Final Notes
 
 *To get a more detailed overview of the project check our presentation: for all other questions reach out to any of the members listed above*
