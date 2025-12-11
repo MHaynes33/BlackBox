@@ -29,9 +29,112 @@ The resulting model achieves **high predictive accuracy (\~0.95 R²)** while mai
 
 ## III. Phase by Phase Workflow Summary
 
-### Phase 1: Discovery, Data Quality, and Business Logic Hypothesis Formation
+## Phase 1: Discovery, Data Quality, and Business Logic Hypothesis Formation
 
-**Technology Used**
+### **Goal**
+
+*Understand the structure and quality of the public/private reimbursement datasets and synthesize statistical patterns along with interview
+insights to form a testable hypothesis of the ACME legacy system’s reimbursement rules.*
+
+---
+
+### **Data Ingestion & Preparation**
+
+- Imported and flattened the two JSON files:
+  - **public_cases** (1,000 rows; 4 variables)
+  - **private_cases** (5,000 rows; 3 variables)
+- Combined into a unified **6,000-row** table.
+- Reimbursement missing in private cases by design.
+
+---
+
+### **Data Quality Validation**
+
+#### **Missing Values**
+- No missing values in any input fields for either dataset.
+- Expected: reimbursement is missing for private cases only.
+
+#### **Range Validation**
+All values fell within realistic constraints:
+- Duration: **1 to 14** days  
+- Mileage: **5 to 1,348** miles  
+- Receipts: **$0.27 to $2,503.46**  
+- Public reimbursement: **$117.24 to $2,337.73**
+
+No negative, zero, or implausible entries.
+
+#### **Outlier Detection**
+- Applied the **1.5 × IQR** rule to all numeric features.  
+- **Zero outliers** detected in public or private datasets.
+
+#### **Public vs Private Comparison**
+- Both datasets demonstrated **near-identical distributions** across duration, mileage, and receipts.  
+- Statistical behavior strongly aligns → **no evidence of domain drift**.
+
+---
+
+### **Statistical Insights**
+
+- **Key Predictive Variables** (based on correlations and distributions):
+  - `total_receipts_amount`
+  - `miles_traveled`
+  - `trip_duration_days`
+
+- **Receipts** show the strongest relationship with reimbursement.
+- **Mileage** exhibits nonlinear effects (diminishing returns).
+- **Duration** has moderate influence with tapering beyond longer trips.
+
+Distribution characteristics (right-skewed, long-tailed) support the presence of nonlinear business logic.
+
+---
+
+### **Business Logic Insights (Stakeholder Interviews & PRD)**
+
+Interviews with ACME staff revealed critical behavioral rules embedded within the legacy reimbursement engine:
+
+#### **Trip Duration**
+- Optimal reimbursement zone around **4–6 days**.
+- **5-day trips** often yield the most favorable output.
+- Penalties begin appearing **after 7 days**.
+
+#### **Mileage Behavior**
+- Ideal daily mileage window: **~180–220 miles/day**.
+- Excessive mileage likely penalized.
+- Very low mileage may trigger under-efficiency penalties.
+
+#### **Receipts Behavior**
+- System is **receipts-driven**, but not linearly:
+  - Diminishing returns at higher spending levels.
+  - Penalties for extremely low spend.
+
+#### **Efficiency Bonuses**
+- Balanced trips (reasonable mileage, moderate duration, moderate spend) receive positive adjustments.
+
+#### **Legacy System Quirks**
+- Department-specific weighting and “memory effects.”
+- Rounding patterns using **.49** and **.99** endings.
+- **±5–10% pseudo-random adjustments** built into the system’s historical logic.
+
+These qualitative insights match the statistical patterns observed in the data.
+
+---
+
+### **Phase 1 Takeaway**
+
+Phase 1 concludes that ACME’s legacy reimbursement engine is:
+
+- **Nonlinear**  
+- **Threshold-based and tiered**  
+- **Receipts-dominant** but subject to diminishing returns  
+- Influenced by **trip efficiency patterns**  
+- Embedded with **historical quirks and random adjustments**  
+
+These findings directly informed the engineered features in Phase 2 and the nonlinear modeling strategies in Phases 3 and 4.
+
+
+**Files Relevant to this Phase**
+
+**Technical Tools Used**
 
 ---
 
