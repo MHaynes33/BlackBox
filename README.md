@@ -1,4 +1,4 @@
-# ACME Reimbursement Engine — Reverse Engineering Legacy Business Logic (working on the title)
+# Reverse Engineering ACME’s Legacy Reimbursement System Using Machine Learning and Business Logic Analysis
 
 ### East Carolina University • Machine Learning / Data Science Graduate Project
 
