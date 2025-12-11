@@ -143,8 +143,6 @@ These findings directly informed the engineered features in Phase 2 and the nonl
 ~ src/INTERVIEWS.md
 ~ src/PRD.md
 
-**Technical Tools Used**
-
 ---
 
 ## Phase 2: Feature Engineering and Baseline Modeling
@@ -393,7 +391,116 @@ Phase 4 confirms that the final stacking ensemble:
 
 **Relevant File for Phase 4**
 
-## 4. How to Run this Project
+## 4. How to Run this Project (Phase by Phase)
+## Phase 1 — How to Run the Data Validation, Statistical EDA, and Business Logic Review
+
+Phase 1 prepares the ACME reimbursement datasets for all downstream modeling.  
+It validates data integrity, performs exploratory statistical analysis, and integrates 
+business-rule insights extracted from interviews and the PRD.
+
+Phase 1 consists of **three components**, each mapped to a notebook or report.
+
+---
+
+## ▶ Step 1 — Run Data Validation & Cleaning
+
+**Notebook:**  
+[`Notebooks/week1_data_cleaning.ipynb`](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/week1_data_cleaning.ipynb)
+
+### What this notebook does
+- Loads and flattens both JSON datasets (`public_cases.json` and `private_cases.json`)
+- Performs structured data-quality checks:
+  - Missing values  
+  - Duplicates  
+  - Invalid numeric ranges  
+  - Public expected_output validation  
+- Generates visual diagnostics:
+  - Histograms and KDE curves  
+  - Boxplots  
+  - Correlation heatmaps  
+  - Pairplots  
+- Runs IQR-based outlier detection (result: **0 outliers detected**)
+
+### Outputs
+- Produces no modified datasets  
+- Displays plots & data-quality diagnostics  
+- Confirms the raw datasets are clean and modeling-ready  
+
+### How to run
+Open the notebook in JupyterLab and run all cells.
+
+---
+
+## ▶ Step 2 — Run Statistical EDA & Public/Private Dataset Comparison
+
+**Notebook:**  
+[`Notebooks/01_EDA_Reimbursement (3).ipynb`](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/01_EDA_Reimbursement%20(3).ipynb)
+
+### What this notebook does
+- Loads both datasets using a flexible JSON parser  
+- Combines public + private into a single 6000-row dataframe  
+- Computes descriptive statistics & missing-value profiling  
+- Generates:
+  - Correlation heatmap  
+  - Individual feature distributions  
+  - Pairwise (public vs private) feature plots  
+  - Regression-based trend analyses  
+  - Public-vs-private reimbursement boxplots  
+- Saves cleaned output files:
+  - `combined_clean.csv`  
+  - `public_clean.csv`  
+  - `private_clean.csv`  
+
+### Outputs
+- CSV exports for optional use in later phases  
+- Visualizations supporting statistical understanding of the datasets
+
+### How to run
+Open the notebook and run all cells sequentially. All figures will render inline.
+
+---
+
+## ▶ Step 3 — Review the Business Logic Summary (Interview + PRD Insights)
+
+**Report:**  
+[`reports/Business_logic_summary.html`](https://github.com/MHaynes33/BlackBox/blob/main/reports/Business_logic_summary.html)
+
+### What this report contains
+A narrative breakdown of the undocumented rules embedded in ACME’s legacy reimbursement engine, including:
+
+- Per-diem base rates  
+- Duration sweet spots  
+- Mileage efficiency curves  
+- Spend-rate penalties & diminishing returns  
+- Receipt nonlinearity  
+- Rounding anomalies  
+- Timing effects (weekday, month, quarter)  
+- Department weighting  
+- User-profile memory  
+- Intentional ±5–10% stochastic noise  
+
+### Purpose
+This document forms the **business-rule foundation** for feature engineering in Phase 2  
+and the nonlinear modeling strategy in Phases 3 and 4.
+
+### How to run
+Open the HTML file in a browser. No execution is required.
+
+---
+
+## Phase 1 Outputs Summary
+
+After completing all three components, you will have:
+
+- Clean, validated datasets with no missing values or outliers  
+- Statistical understanding of feature behavior  
+- Visual evidence of public/private alignment  
+- Cleaned CSV files for later use  
+- A clear business-rule hypothesis map for feature engineering  
+
+Phase 1 ensures that the raw ACME datasets, their statistical properties,  
+and their business context are fully understood before building models in Phase 2.
+
 
 ## 5. Key Findings
 
