@@ -137,18 +137,12 @@ These findings directly informed the engineered features in Phase 2 and the nonl
 
 - Notebooks/01_EDA_Reimbursement (3).ipynb
 - BlackBox/reports/Business_logic_summary.html
-
-~ Notebooks/week1_data_cleaning.ipynb
-
-~ data/private_cases.json
-
-~ data/public_cases.json
-
-~ data/combined_clean.csv
-
-~ src/INTERVIEWS.md
-
-~ src/PRD.md
+- Notebooks/week1_data_cleaning.ipynb
+- data/private_cases.json
+- data/public_cases.json
+- data/combined_clean.csv
+- src/INTERVIEWS.md
+- src/PRD.md
 
 ---
 
@@ -249,17 +243,12 @@ The dataset, engineered features, and baseline performance results fully prepare
 
 **Files Relevant to this Phase**
 
-~ data/phase2_features_baseline_models.csv
-
-~ Notebooks/02_Feature_Engineering_and_Baseline_Model.ipynb
-
-~ Notebooks/Feature Correlation and Visualization.ipynb
-
-~ Notebooks/Performance Summary.ipynb
-
-~ reports/EDA & Baseline Model Info.html
-
-~ reports/Feature Definitions and Rationales Table Updated .html
+- data/phase2_features_baseline_models.csv
+- Notebooks/02_Feature_Engineering_and_Baseline_Model.ipynb
+- Notebooks/Feature Correlation and Visualization.ipynb
+- Notebooks/Performance Summary.ipynb
+-  reports/EDA & Baseline Model Info.html
+- reports/Feature Definitions and Rationales Table Updated .html
 
 ---
 
@@ -406,9 +395,9 @@ Phase 4 confirms that the final stacking ensemble:
 
 ---
 
-**Files Relevant to this Phase**
+**File Relevant to this Phase**
 
-~ Notebooks/Model Interpretability & Feature-Impact Analysis.ipynb
+- Notebooks/Model Interpretability & Feature-Impact Analysis.ipynb
 
 ---
 
