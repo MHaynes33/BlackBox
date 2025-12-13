@@ -400,26 +400,18 @@ Phase 4 confirms that the final stacking ensemble:
 ---
 
 ## IV. How to Run this Project (Phase by Phase)
----
-title: "How to Run the Project (Phase by Phase)"
-format:
-  html:
-    toc: true
-    toc-location: right
-    number-sections: true
----
 
-## Overview
 
-This project is organized into four sequential phases.  
-Each phase corresponds directly to notebooks, scripts, and reports in the repository and can be executed independently once required inputs are available.
+### Overview
+
+This project is organized into four sequential phases.  Each phase corresponds directly to notebooks, scripts, and reports in the repository and can be executed independently once required inputs are available.
 
 ---
 
-## Phase 1 — Data Validation, Statistical EDA, and Business Logic Review
+## Phase 1:  Data Validation, Statistical EDA, and Business Logic Review
 
 ### Goal
-Prepare the ACME reimbursement datasets for downstream modeling by validating data integrity, performing exploratory analysis, and reviewing business-rule context derived from interviews and PRD documentation.
+*Prepare the ACME reimbursement datasets for downstream modeling by validating data integrity, performing exploratory analysis, and reviewing business-rule context derived from interviews and PRD documentation.*
 
 ### Inputs
 - `data/public_cases.json`
@@ -487,7 +479,7 @@ https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/01_EDA_Reimbursement%2
 
 ---
 
-## Phase 2 — Feature Engineering & Baseline Modeling
+## Phase 2: Feature Engineering & Baseline Modeling
 
 ### Goal
 Engineer derived features and establish baseline regression benchmarks.
