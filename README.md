@@ -73,6 +73,7 @@ Interactive, narrative-driven Jupyter notebooks used to explore data, engineer f
 
 - **Phase 4: Model Interpretability**
   - `Model Interpretability & Feature-Impact Analysis.ipynb`
+  - `Calibrated Ensemble Performance (with Residual Model).ipynb`
 
 ---
 
