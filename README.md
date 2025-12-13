@@ -400,482 +400,287 @@ Phase 4 confirms that the final stacking ensemble:
 ---
 
 ## IV. How to Run this Project (Phase by Phase)
-## Phase 1 — How to Run the Data Validation, Statistical EDA, and Business Logic Review
+---
+title: "How to Run the Project (Phase by Phase)"
+format:
+  html:
+    toc: true
+    toc-location: right
+    number-sections: true
+---
 
-Phase 1 prepares the ACME reimbursement datasets for all downstream modeling.  
-It validates data integrity, performs exploratory statistical analysis, and integrates 
-business-rule insights extracted from interviews and the PRD.
+## Overview
 
-Phase 1 consists of **three components**, each mapped to a notebook or report.
+This project is organized into four sequential phases.  
+Each phase corresponds directly to notebooks, scripts, and reports in the repository and can be executed independently once required inputs are available.
 
 ---
 
-##  Step 1 — Run Data Validation & Cleaning
-
-**Notebook:**  
-[`Notebooks/week1_data_cleaning.ipynb`](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/week1_data_cleaning.ipynb)
-
-### What this notebook does
-- Loads and flattens both JSON datasets (`public_cases.json` and `private_cases.json`)
-- Performs structured data-quality checks:
-  - Missing values  
-  - Duplicates  
-  - Invalid numeric ranges  
-  - Public expected_output validation  
-- Generates visual diagnostics:
-  - Histograms and KDE curves  
-  - Boxplots  
-  - Correlation heatmaps  
-  - Pairplots  
-- Runs IQR-based outlier detection (result: **0 outliers detected**)
-
-### Outputs
-- Produces no modified datasets  
-- Displays plots & data-quality diagnostics  
-- Confirms the raw datasets are clean and modeling-ready  
-
-### How to run
-Open the notebook in JupyterLab and run all cells.
-
----
-
-## Step 2 — Run Statistical EDA & Public/Private Dataset Comparison
-
-**Notebook:**  
-[`Notebooks/01_EDA_Reimbursement (3).ipynb`](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/01_EDA_Reimbursement%20(3).ipynb)
-
-### What this notebook does
-- Loads both datasets using a flexible JSON parser  
-- Combines public + private into a single 6000-row dataframe  
-- Computes descriptive statistics & missing-value profiling  
-- Generates:
-  - Correlation heatmap  
-  - Individual feature distributions  
-  - Pairwise (public vs private) feature plots  
-  - Regression-based trend analyses  
-  - Public-vs-private reimbursement boxplots  
-- Saves cleaned output files:
-  - `combined_clean.csv`  
-  - `public_clean.csv`  
-  - `private_clean.csv`  
-
-### Outputs
-- CSV exports for optional use in later phases  
-- Visualizations supporting statistical understanding of the datasets
-
-### How to run
-Open the notebook and run all cells sequentially. All figures will render inline.
-
----
-
-##  Step 3 — Review the Business Logic Summary (Interview + PRD Insights)
-
-**Report:**  
-[`reports/Business_logic_summary.html`](https://github.com/MHaynes33/BlackBox/blob/main/reports/Business_logic_summary.html)
-
-### What this report contains
-A narrative breakdown of the undocumented rules embedded in ACME’s legacy reimbursement engine, including:
-
-- Per-diem base rates  
-- Duration sweet spots  
-- Mileage efficiency curves  
-- Spend-rate penalties & diminishing returns  
-- Receipt nonlinearity  
-- Rounding anomalies  
-- Timing effects (weekday, month, quarter)  
-- Department weighting  
-- User-profile memory  
-- Intentional ±5–10% stochastic noise  
-
-### Purpose
-This document forms the **business-rule foundation** for feature engineering in Phase 2  
-and the nonlinear modeling strategy in Phases 3 and 4.
-
-### How to run
-Open the HTML file in a browser. No execution is required.
-
----
-
-## Phase 1 Outputs Summary
-
-After completing all three components, you will have:
-
-- Clean, validated datasets with no missing values or outliers  
-- Statistical understanding of feature behavior  
-- Visual evidence of public/private alignment  
-- Cleaned CSV files for later use  
-- A clear business-rule hypothesis map for feature engineering  
-
-Phase 1 ensures that the raw ACME datasets, their statistical properties,  
-and their business context are fully understood before building models in Phase 2.
-
-________________
-
-# Phase 2: Feature Engineering & Baseline Modeling
-
-Phase 2 transforms the Phase 1 cleaned dataset into newly engineered features and evaluates baseline regression models to establish a quantitative performance benchmark.
-
-Each step below corresponds directly to a project notebook, ensuring full traceability and reproducibility across the workflow.
-
----
-
-## Phase 2 Workflow Overview
-
-| Step | Notebook |
-|-----|----------|
-| Load & Validate Data | [02_Feature_Engineering_and_Baseline_Model.ipynb](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/02_Feature_Engineering_and_Baseline_Model.ipynb) |
-| Engineer Derived Features | [02_Feature_Engineering_and_Baseline_Model.ipynb](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/02_Feature_Engineering_and_Baseline_Model.ipynb) |
-| Outlier & Distribution Checks | [02_Feature_Engineering_and_Baseline_Model.ipynb](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/02_Feature_Engineering_and_Baseline_Model.ipynb) |
-| Correlation & Driver Analysis | [Feature Correlation and Visualization.ipynb](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/Feature%20Correlation%20and%20Visualization.ipynb) |
-| Baseline Modeling (Linear → Polynomial) | [02_Feature_Engineering_and_Baseline_Model.ipynb](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/02_Feature_Engineering_and_Baseline_Model.ipynb) |
-| Baseline Performance Evaluation | [Performance Summary.ipynb](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/Performance%20Summary.ipynb) |
-| Data Output for Phase 3 | [phase2_features_baseline_models.csv](https://github.com/MHaynes33/BlackBox/blob/main/data/phase2_features_baseline_models.csv) |
-
-*This structure ensures transparency and repeatability for every analytical step.*
-
----
-
-## 1. Loading & Validating the Clean Dataset  
-**Notebook:**  
-[02_Feature_Engineering_and_Baseline_Model.ipynb](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/02_Feature_Engineering_and_Baseline_Model.ipynb)
-
-Phase 2 begins by loading the Phase 1 output dataset.
-
-The notebook:
-- inspects dataset shape and structure  
-- checks for missing values  
-- confirms that only **public cases (N = 1,000)** contain reimbursement labels  
-- verifies that cleaned variables remain consistent after Phase 1 wrangling  
-
----
-
-## 2. Engineering Derived Features  
-**Notebook:**  
-[02_Feature_Engineering_and_Baseline_Model.ipynb](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/02_Feature_Engineering_and_Baseline_Model.ipynb)
-
-To capture efficiency, balance, and nonlinear travel behavior, the following features are engineered:
-
-| Feature | Formula | Purpose |
-|--------|---------|---------|
-| `cost_per_day` | receipts ÷ days | Daily spending intensity |
-| `cost_per_mile` | receipts ÷ miles | Travel efficiency per mile |
-| `miles_per_day` | miles ÷ days | Daily travel intensity |
-| `cost_ratio` | cost_per_day ÷ cost_per_mile | Balance between time- and distance-based costs |
-
-These features are:
-- protected against division-by-zero  
-- cleaned of NaN and infinite values  
-- validated using descriptive statistics  
-
----
-
-## 3. Outlier Detection & Feature Distribution Analysis  
-**Notebook:**  
-[02_Feature_Engineering_and_Baseline_Model.ipynb](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/02_Feature_Engineering_and_Baseline_Model.ipynb)
-
-Using an IQR-based approach, the notebook evaluates:
-- trip duration  
-- miles traveled  
-- total receipts  
-- engineered efficiency features  
-
-**Summary findings:**
-- No extreme anomalies in core input features  
-- Engineered cost metrics show expected right-skewed behavior  
-- Feature distributions are stable and modeling-ready  
-
----
-
-## 4. Preparing the Modeling Dataset  
-**Notebook:**  
-[02_Feature_Engineering_and_Baseline_Model.ipynb](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/02_Feature_Engineering_and_Baseline_Model.ipynb)
-
-Seven numeric predictors are selected:
-
-- `trip_duration_days`  
-- `miles_traveled`  
-- `total_receipts_amount`  
-- `cost_per_day`  
-- `cost_per_mile`  
-- `miles_per_day`  
-- `cost_ratio`  
-
-**Target variable:** `reimbursement`
-
-A deterministic **75 / 25 train–test split** is applied:
-- first 750 public cases → training  
-- remaining 250 public cases → testing  
-
----
-
-## 5. Baseline Model Development  
-**Notebook:**  
-[02_Feature_Engineering_and_Baseline_Model.ipynb](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/02_Feature_Engineering_and_Baseline_Model.ipynb)
-
-Four baseline regression models are evaluated:
-
-### 5.1 Linear Regression
-- Serves as the baseline comparator  
-- Achieves **R² ≈ 0.784**  
-- Confirms strong linear influence of receipts, mileage, and duration  
-
-### 5.2 Ridge Regression
-- Introduces L2 regularization  
-- Produces performance similar to Linear Regression  
-- Demonstrates coefficient stability  
-
-### 5.3 Lasso Regression
-- Introduces L1 regularization  
-- Retains all predictors (no feature elimination)  
-
-### 5.4 Polynomial Regression (Degree 2)
-- Introduces second-order terms and feature interactions  
-- Achieves the **highest baseline performance (R² ≈ 0.892)**  
-- Demonstrates that nonlinear interactions are required to approximate legacy behavior  
-
----
-
-## 6. Feature Correlation & Driver Analysis  
-**Notebook:**  
-[Feature Correlation and Visualization.ipynb](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/Feature%20Correlation%20and%20Visualization.ipynb)
-
-Key findings:
-- `total_receipts_amount` is the strongest predictor  
-- `miles_traveled` and `trip_duration_days` are meaningful contributors  
-- Engineered features exhibit low linear correlation but support nonlinear modeling  
-
----
-
-## 7. Baseline Performance Evaluation  
-**Notebook:**  
-[Performance Summary.ipynb](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/Performance%20Summary.ipynb)
-
-Baseline models are evaluated using:
-- MAE  
-- RMSE  
-- R²  
-
-Results confirm:
-- Polynomial regression outperforms linear baselines  
-- Linear models capture global trends but miss nonlinear structure  
-
----
-
-## 8. Phase 2 Outputs
-
-**Generated Dataset:**  
-[phase2_features_baseline_models.csv](https://github.com/MHaynes33/BlackBox/blob/main/data/phase2_features_baseline_models.csv)
-
-This enriched dataset serves as the modeling input for Phase 3.
-
----
-
-## 9. Phase 2 Summary
-
-Phase 2 successfully:
-- engineered features aligned with cost, duration, and efficiency patterns  
-- validated engineered features through distribution and outlier checks  
-- established baseline regression models  
-- demonstrated that nonlinear interactions are required to approximate legacy behavior  
-- produced the enriched dataset used in Phase 3  
-
-By the end of Phase 2, the project had a validated feature set, baseline performance benchmarks, and a modeling-ready dataset to support advanced nonlinear and ensemble modeling in Phase 3.
-
----
-
-## Phase 3: Modeling Outlook & integration Plan
+## Phase 1 — Data Validation, Statistical EDA, and Business Logic Review
 
 ### Goal
+Prepare the ACME reimbursement datasets for downstream modeling by validating data integrity, performing exploratory analysis, and reviewing business-rule context derived from interviews and PRD documentation.
 
-*Advance beyond Phase 2 polynomial baselines by evaluating nonlinear and
-ensemble modeling strategies capable of capturing ACME’s tiered, nonlinear,
-and diminishing-return reimbursement logic. Phase 3 introduces a structured
-modeling pipeline, evaluates individual nonlinear regressors, integrates PRDdriven business logic features, and develops a calibrated stacking ensemble
-that most closely replicates ACME’s 60-year-old legacy system.*
-
----
-
-### Phase 3 Input Data
-
-All Phase 3 workflows use the enriched dataset produced at the end of Phase 2:
-
-- **Dataset:**  
-  [data/phase2_features_baseline_models.csv](https://github.com/MHaynes33/BlackBox/blob/main/data/phase2_features_baseline_models.csv)
-
-This dataset contains engineered features and the observed `reimbursement` values for public cases.
+### Inputs
+- `data/public_cases.json`
+- `data/private_cases.json`
 
 ---
 
-### Phase 3 Workflow Overview
+### Step 1 — Data Validation & Cleaning
+**Notebook:** `Notebooks/week1_data_cleaning.ipynb`  
+https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/week1_data_cleaning.ipynb
 
-Phase 3 consists of three core steps:
+**What this does**
+- Loads and flattens both JSON datasets
+- Performs structured data-quality checks
+- Validates public-case expected outputs
+- Generates exploratory visual diagnostics
 
-1. Nonlinear and ensemble model training  
-2. Holdout performance evaluation  
-3. Granular hit-rate analysis  
+**Outputs**
+- Inline plots and data-quality summaries  
+- No datasets written
 
-Each step is implemented using a dedicated notebook or script to ensure reproducibility.
-
----
-
-### 1. Model Development & Integration
-
-**Notebook:**  
-[Notebooks/Model Development & Integration.ipynb](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/Model%20Development%20%26%20Integration.ipynb)
-
-This notebook performs the primary Phase 3 modeling.
-
-**Modeling setup**
-- **Features used (7):**
-  - `trip_duration_days`
-  - `miles_traveled`
-  - `total_receipts_amount`
-  - `cost_per_day`
-  - `cost_per_mile`
-  - `miles_per_day`
-  - `cost_ratio`
-- **Target variable:** `reimbursement`
-- **Train/test split:** 75% training, 25% testing
-
-**Models trained**
-- Decision Tree  
-- Random Forest  
-- Gradient Boosting  
-- Support Vector Regression (SVR)  
-- MLP Neural Network  
-- **Stacking Ensemble**
-
-Each model is evaluated using:
-- Mean Absolute Error (MAE)
-- Root Mean Squared Error (RMSE)
-- Coefficient of Determination (R²)
-
-An **Actual vs. Predicted** scatter plot is generated for the stacking ensemble to visually assess model alignment.
+**How to run**
+- Open the notebook in JupyterLab and run all cells.
 
 ---
 
-### 2. Holdout Performance Metrics
+### Step 2 — Statistical EDA & Dataset Comparison
+**Notebook:** `Notebooks/01_EDA_Reimbursement (3).ipynb`  
+https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/01_EDA_Reimbursement%20(3).ipynb
 
-**Script:**  
-[scripts/phase3_performance_metrics.py](https://github.com/MHaynes33/BlackBox/blob/main/scripts/phase3_performance_metrics.py)
+**What this does**
+- Combines public and private datasets
+- Computes descriptive statistics
+- Generates public vs. private comparisons
 
-This script provides a reproducible holdout evaluation of the Phase 3 stacking ensemble.
+**Outputs**
+- `combined_clean.csv`
+- `public_clean.csv`
+- `private_clean.csv`
+- Inline visualizations
 
-**Evaluation procedure**
-- Loads `data/phase2_features_baseline_models.csv`
-- Applies an **index-based 75 / 25 holdout split**
-- Trains a stacking ensemble composed of:
-  - Decision Tree
-  - Random Forest
-  - Gradient Boosting
-  - Linear Regression meta-model
-- Reports:
-  - MAE
-  - RMSE
-  - R²
-  - Exact match rate (≤ $0.01)
-  - Within-$1 accuracy
-  - Within-$5 accuracy
-
-**Output**
-- **Holdout predictions:**  
-  [data/phase3_predictions.csv](https://github.com/MHaynes33/BlackBox/blob/main/data/phase3_predictions.csv)
-
-This file contains the **actual reimbursement values and corresponding model predictions** for each holdout observation, supporting reproducibility and external audit.
+**How to run**
+- Open the notebook and run all cells sequentially.
 
 ---
 
-### 3. Granular Accuracy & Hit Rates
+### Step 3 — Business Logic Summary Review
+**Report:** `reports/Business_logic_summary.html`
 
-**Notebook:**  *notebook needs fixing*: https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/Phase3_Performance.ipynb
+**What this contains**
+- Interview- and PRD-derived reimbursement logic hypotheses
 
-This notebook examines fine-grained prediction accuracy by analyzing exact and near-exact reimbursement matches.  
-It highlights cent-level discrepancies caused by rounding and stochastic behavior embedded in ACME’s legacy reimbursement system.
+**Outputs**
+- No datasets written
 
----
-
-### Phase 3 Results Summary
-
-Phase 3 demonstrates that:
-
-- Linear and baseline models are insufficient to capture ACME’s reimbursement logic
-- Tree-based and ensemble models effectively capture nonlinear and tiered behavior
-- The **stacking ensemble** achieves the strongest overall performance across MAE, RMSE, and R²
-- Despite strong global accuracy, exact cent-level matches remain rare due to legacy rounding effects
+**How to run**
+- Open the HTML file in a browser.
 
 ---
 
-### Phase 3 Outputs
+### Phase 1 Outputs Summary
+- Validated datasets
+- EDA context for modeling
+- Business-logic hypotheses guiding feature engineering
 
-At the conclusion of Phase 3, the following are produced:
-
-- Holdout prediction file:  
-  `data/phase3_predictions.csv`
-- Global performance metrics (MAE, RMSE, R²) for the various models as shown on the notebook: [Notebooks/Model Development & Integration.ipynb](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/Model%20Development%20%26%20Integration.ipynb)
-- Granular hit-rate statistics as shown on: 
 ---
 
-Phase 3 Final Takeaway:
-The stacking ensemble achieves:
-• Best overall predictive accuracy compare to other models generated
-• Strong generalization across trip types
-• Alignment with business logic discovered in Phases 1–2
-• A reliable foundation for further interpretability work
-
-----
-
-## Phase 4 — Model Interpretability & Feature-Impact
+## Phase 2 — Feature Engineering & Baseline Modeling
 
 ### Goal
+Engineer derived features and establish baseline regression benchmarks.
 
-*Explain the Phase 3 model’s behavior, confirm that it matches the interviews/PRD expectations, and surface the business rules it appears to learn*
-
----
-
-### Phase 4 Inputs
-
-Phase 4 relies on outputs generated in earlier phases:
-
-- Phase 2 feature dataset:  
-  `data/phase2_features_baseline_models.csv`
-- Phase 3 model behavior and predictions:  
-  `data/phase3_predictions.csv`
-
-No additional preprocessing or feature engineering is required.
+### Inputs
+- Phase 1 validated data (as used in Phase 2 notebooks)
 
 ---
 
-### Step 1 — Run the Interpretability Notebook
+### Step 1 — Feature Engineering & Baseline Models
+**Notebook:** `Notebooks/02_Feature_Engineering_and_Baseline_Model.ipynb`  
+https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/02_Feature_Engineering_and_Baseline_Model.ipynb
 
-Open and run the Phase 4 notebook:
+**What this does**
+- Engineers derived efficiency features
+- Performs feature sanity checks
+- Trains baseline regression models
 
-- **Notebook:**  
-  [Notebooks/Model Interpretability & Feature-Impact Analysis.ipynb](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/Model%20Interpretability%20%26%20Feature-Impact%20Analysis.ipynb)
+**Outputs**
+- `data/phase2_features_baseline_models.csv`  
+https://github.com/MHaynes33/BlackBox/blob/main/data/phase2_features_baseline_models.csv
 
-This notebook:
-- Examines feature importance from tree-based models
-- Uses permutation-style and SHAP-inspired reasoning to explain predictions
-- Identifies dominant drivers, thresholds, and nonlinear effects
-- Relates model behavior to documented and interview-derived business logic
-
----
-
-### Step 2 — Review Feature-Impact & Business Logic Alignment
-
-Within the notebook, review:
-- Relative importance of receipts, mileage, and trip duration
-- The role of engineered features introduced in Phase 2
-- Evidence of tiered and nonlinear reimbursement behavior
-- Residual patterns that indicate inherent noise in the legacy system
-
-These findings validate that the Phase 3 ensemble model is replicating legacy reimbursement logic rather than inventing new rules.
+**How to run**
+- Open the notebook and run all cells.
 
 ---
 
-### Phase 4 Outputs
+### Step 2 — Correlation & Driver Analysis
+**Notebook:** `Notebooks/Feature Correlation and Visualization.ipynb`  
+https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/Feature%20Correlation%20and%20Visualization.ipynb
 
-Phase 4 produces **interpretive insights**, not new artifacts.  
-All results are presented as narrative explanations and visualizations (table/chart) within the notebook.
+**What this does**
+- Visualizes feature relationships and drivers
+
+**Outputs**
+- Inline plots
+
+**How to run**
+- Open the notebook and run all cells.
+
+---
+
+### Step 3 — Baseline Performance Summary
+**Notebook:** `Notebooks/Performance Summary.ipynb`  
+https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/Performance%20Summary.ipynb
+
+**What this does**
+- Evaluates baseline model performance using regression metrics
+
+**Outputs**
+- Inline evaluation tables
+
+**How to run**
+- Open the notebook and run all cells.
+
+---
+
+### Step 4 — Review Phase 2 EDA & Baseline Model Report
+**Report:** `reports/EDA & Baseline Model Info.html`  
+https://github.com/MHaynes33/BlackBox/blob/main/reports/EDA%20%26%20Baseline%20Model%20Info.html
+
+**What this contains**
+- Phase 2 EDA recap
+- Statistical summaries
+- Baseline model documentation and results
+
+**Outputs**
+- No datasets written
+
+**How to run**
+- Open the HTML file in a browser.
+
+---
+
+### Step 5 — Review Feature Definitions & Rationales
+**Report:** `reports/Feature Definitions and Rationales Table Updated.html`  
+https://github.com/MHaynes33/BlackBox/blob/main/reports/Feature%20Definitions%20and%20Rationales%20Table%20Updated%20.html
+
+**What this contains**
+- Authoritative feature definitions
+- Feature engineering rationale
+- Target variable documentation
+
+**Outputs**
+- No datasets written
+
+**How to run**
+- Open the HTML file in a browser.
+
+---
+
+### Phase 2 Outputs Summary
+- Engineered modeling dataset
+- Baseline benchmarks
+- Feature reference documentation
+
+---
+
+## Phase 3 — Nonlinear & Ensemble Modeling
+
+### Goal
+Evaluate nonlinear and ensemble regression models and generate holdout predictions.
+
+### Inputs
+- `data/phase2_features_baseline_models.csv`
+
+---
+
+### Step 1 — Model Development & Integration
+**Notebook:** `Notebooks/Model Development & Integration.ipynb`  
+https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/Model%20Development%20%26%20Integration.ipynb
+
+**What this does**
+- Trains nonlinear and ensemble models
+- Generates predicted vs. actual plots
+
+**Outputs**
+- Inline evaluation results
+
+**How to run**
+- Open the notebook and run all cells.
+
+---
+
+### Step 2 — Holdout Metrics & Predictions
+**Script:** `scripts/phase3_performance_metrics.py`  
+https://github.com/MHaynes33/BlackBox/blob/main/scripts/phase3_performance_metrics.py
+
+**What this does**
+- Runs a 75/25 holdout evaluation
+- Reports MAE, RMSE, R², and within-$ thresholds
+- Writes holdout predictions
+
+**Outputs**
+- `data/phase3_predictions.csv`  
+https://github.com/MHaynes33/BlackBox/blob/main/data/phase3_predictions.csv
+
+python scripts/phase3_performance_metrics.py
+
+Phase 3 Outputs Summary
+
+Holdout predictions
+
+Ensemble performance metrics
+
+---
+
+Phase 4: Model Interpretability & Feature-Impact Analysis
+
+Goal
+
+Explain model behavior and validate alignment with PRD documentation and employee interviews.
+
+Inputs
+
+data/phase2_features_baseline_models.csv
+
+data/phase3_predictions.csv
+
+Step 1 — Interpretability Analysis
+
+Notebook: Notebooks/Model Interpretability & Feature-Impact Analysis.ipynb
+https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/Model%20Interpretability%20%26%20Feature-Impact%20Analysis.ipynb
+
+What this does
+
+Reviews feature importance and impact
+
+Examines thresholds and residual patterns
+
+Connects model behavior to business logic
+
+Outputs
+
+Interpretive plots and narrative explanations
+
+No datasets written
+
+How to run
+
+Open the notebook and run all cells.
+
+Project Completion
+
+After completing all four phases, the repository provides:
+
+A reproducible ML workflow
+
+Holdout predictions for audit
+
+Interpretability analysis supporting stakeholder trust
+---
+
 
 ## V. Key Findings & How to Run the Model
 
