@@ -135,9 +135,8 @@ These findings directly informed the engineered features in Phase 2 and the nonl
 
 **Files Relevant to this Phase**
 
-~ Notebooks/01_EDA_Reimbursement (3).ipynb
-
-~ BlackBox/reports/Business_logic_summary.html
+- Notebooks/01_EDA_Reimbursement (3).ipynb
+- BlackBox/reports/Business_logic_summary.html
 
 ~ Notebooks/week1_data_cleaning.ipynb
 
