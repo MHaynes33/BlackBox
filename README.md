@@ -24,10 +24,10 @@ Across four phases, our team:
 -   Interpreted the final model to reconstruct ACME’s underlying rules, confirming alignment with stakeholder interviews and PRD expectations.
 
 The resulting model achieves **high predictive accuracy (\~0.95 R²)** while maintaining interpretability, providing ACME a modern, transparent foundation for replacing/recreating its legacy reimbursement engine.
+- ------------------------------------------------------------------------
+## II. Repository Structure 
 
-## II. Repository Structure (work in progress as we still need to delete some files)
-
-
+- ------------------------------------------------------------------------
 ## III. Phase by Phase Workflow Summary
 
 ## Phase 1: Discovery, Data Quality, and Business Logic Hypothesis Formation
@@ -399,7 +399,7 @@ Phase 4 confirms that the final stacking ensemble:
 
 - Notebooks/Model Interpretability & Feature-Impact Analysis.ipynb
 
----
+- ------------------------------------------------------------------------
 
 ## IV. How to Run this Project (Phase by Phase)
 
@@ -663,11 +663,10 @@ https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/Model%20Interpretabili
 
 ---
 ### Project Phase by Phase Steps Complete!
----
-
+- ------------------------------------------------------------------------
 
 ## V. Key Findings & How to Run the Model
-
+- ------------------------------------------------------------------------
 
 ## VI. Final Notes
 
