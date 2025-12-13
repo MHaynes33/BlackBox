@@ -785,7 +785,6 @@ This file contains the **actual reimbursement values and corresponding model pre
 
 **Notebook:**  *notebook needs fixing*: https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/Phase3_Performance.ipynb
 
-
 This notebook examines fine-grained prediction accuracy by analyzing exact and near-exact reimbursement matches.  
 It highlights cent-level discrepancies caused by rounding and stochastic behavior embedded in ACME’s legacy reimbursement system.
 
@@ -822,9 +821,58 @@ The stacking ensemble achieves:
 #*Phase 3 is complete, now ready for Phase 4*
 ----
 
+## Phase 4 — Model Interpretability & Feature-Impact
 
+### Goal
 
+*Explain the Phase 3 model’s behavior, confirm that it matches the interviews/PRD expectations, and surface the business rules it appears to learn*
 
+---
+
+### Phase 4 Inputs
+
+Phase 4 relies on outputs generated in earlier phases:
+
+- Phase 2 feature dataset:  
+  `data/phase2_features_baseline_models.csv`
+- Phase 3 model behavior and predictions:  
+  `data/phase3_predictions.csv`
+
+No additional preprocessing or feature engineering is required.
+
+---
+
+### Step 1 — Run the Interpretability Notebook
+
+Open and run the Phase 4 notebook:
+
+- **Notebook:**  
+  [Notebooks/Model Interpretability & Feature-Impact Analysis.ipynb](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/Model%20Interpretability%20%26%20Feature-Impact%20Analysis.ipynb)
+
+This notebook:
+- Examines feature importance from tree-based models
+- Uses permutation-style and SHAP-inspired reasoning to explain predictions
+- Identifies dominant drivers, thresholds, and nonlinear effects
+- Relates model behavior to documented and interview-derived business logic
+
+---
+
+### Step 2 — Review Feature-Impact & Business Logic Alignment
+
+Within the notebook, review:
+- Relative importance of receipts, mileage, and trip duration
+- The role of engineered features introduced in Phase 2
+- Evidence of tiered and nonlinear reimbursement behavior
+- Residual patterns that indicate inherent noise in the legacy system
+
+These findings validate that the Phase 3 ensemble model is replicating legacy reimbursement logic rather than inventing new rules.
+
+---
+
+### Phase 4 Outputs
+
+Phase 4 produces **interpretive insights**, not new artifacts.  
+All results are presented as narrative explanations and visualizations (table/chart) within the notebook.
 
 ## V. Key Findings & How to Run the Model
 
