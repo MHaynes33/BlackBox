@@ -818,7 +818,6 @@ The stacking ensemble achieves:
 • Alignment with business logic discovered in Phases 1–2
 • A reliable foundation for further interpretability work
 
-#*Phase 3 is complete, now ready for Phase 4*
 ----
 
 ## Phase 4 — Model Interpretability & Feature-Impact
