@@ -840,7 +840,7 @@ https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/Model%20Interpretabili
 ### Project Phase by Phase Steps Complete!
 - ------------------------------------------------------------------------
 
-## V. Key Findings & How to Run the Model
+## V. How to Run the Final Model: Stacking Ensemble
 - ------------------------------------------------------------------------
 
 ## VI. Final Notes
