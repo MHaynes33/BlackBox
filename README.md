@@ -783,8 +783,8 @@ This file contains the **actual reimbursement values and corresponding model pre
 
 ### 3. Granular Accuracy & Hit Rates
 
-**Notebook:**  
-[Notebooks/Model Hit Rates.ipynb](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/Model%20Hit%20Rates.ipynb)
+**Notebook:**  *notebook needs fixing*: https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/Phase3_Performance.ipynb
+
 
 This notebook examines fine-grained prediction accuracy by analyzing exact and near-exact reimbursement matches.  
 It highlights cent-level discrepancies caused by rounding and stochastic behavior embedded in ACME’s legacy reimbursement system.
@@ -804,15 +804,13 @@ Phase 3 demonstrates that:
 
 ### Phase 3 Outputs
 
-At the conclusion of Phase 3, the following artifacts are produced:
+At the conclusion of Phase 3, the following are produced:
 
 - Holdout prediction file:  
   `data/phase3_predictions.csv`
 - Global performance metrics (MAE, RMSE, R²) for the various models as shown on the notebook: [Notebooks/Model Development & Integration.ipynb](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/Model%20Development%20%26%20Integration.ipynb)
-- Granular hit-rate statistics as shown on: [Notebooks/Model Hit Rates.ipynb](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/Model%20Hit%20Rates.ipynb)
+- Granular hit-rate statistics as shown on: 
 ---
-
-*Phase 3 is complete*
 
 Phase 3 Final Takeaway:
 The stacking ensemble achieves:
@@ -821,6 +819,8 @@ The stacking ensemble achieves:
 • Alignment with business logic discovered in Phases 1–2
 • A reliable foundation for further interpretability work
 
+#*Phase 3 is complete, now ready for Phase 4*
+----
 
 
 
