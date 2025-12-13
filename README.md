@@ -402,7 +402,7 @@ Phase 1 consists of **three components**, each mapped to a notebook or report.
 
 ---
 
-## ▶ Step 1 — Run Data Validation & Cleaning
+##  Step 1 — Run Data Validation & Cleaning
 
 **Notebook:**  
 [`Notebooks/week1_data_cleaning.ipynb`](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/week1_data_cleaning.ipynb)
@@ -431,7 +431,7 @@ Open the notebook in JupyterLab and run all cells.
 
 ---
 
-## ▶ Step 2 — Run Statistical EDA & Public/Private Dataset Comparison
+## Step 2 — Run Statistical EDA & Public/Private Dataset Comparison
 
 **Notebook:**  
 [`Notebooks/01_EDA_Reimbursement (3).ipynb`](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/01_EDA_Reimbursement%20(3).ipynb)
@@ -460,7 +460,7 @@ Open the notebook and run all cells sequentially. All figures will render inline
 
 ---
 
-## ▶ Step 3 — Review the Business Logic Summary (Interview + PRD Insights)
+##  Step 3 — Review the Business Logic Summary (Interview + PRD Insights)
 
 **Report:**  
 [`reports/Business_logic_summary.html`](https://github.com/MHaynes33/BlackBox/blob/main/reports/Business_logic_summary.html)
@@ -503,200 +503,175 @@ and their business context are fully understood before building models in Phase 
 
 ________________
 
-# Phase 2 (working on this)
+# Phase 2: Feature Engineering & Baseline Modeling
 
-Phase 2 transforms the Phase-1 cleaned dataset into newly engineered features and trains baseline models to establish a performance benchmark.
+Phase 2 transforms the Phase 1 cleaned dataset into newly engineered features and evaluates baseline regression models to establish a quantitative performance benchmark.
 
-Every key step below corresponds to a specific notebook:
+Each step below corresponds directly to a project notebook, ensuring full traceability and reproducibility across the workflow.
+
+---
+
+## Phase 2 Workflow Overview
 
 | Step | Notebook |
-|------|----------|
-| Load/Validate Data | **Notebooks/02_Feature_Engineering_and_Baseline_Model.ipynb** |
-| Engineer Features | **Notebooks/02_Feature_Engineering_and_Baseline_Model.ipynb** |
-| Outlier & Distribution Checks | **Notebooks/02_Feature_Engineering_and_Baseline_Model.ipynb** |
-| Correlation & Driver Analysis | **Notebooks/Feature Correlation and Visualization.ipynb** |
-| Baseline Modeling (Linear → Polynomial) | **Notebooks/02_Feature_Engineering_and_Baseline_Model.ipynb** |
-| Performance Evaluation & Limits | **Notebooks/Performance Summary.ipynb** |
-| Data Output for Phase 3 | **Generated file: data/phase2_features_baseline_models.csv** |
+|-----|----------|
+| Load & Validate Data | [02_Feature_Engineering_and_Baseline_Model.ipynb](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/02_Feature_Engineering_and_Baseline_Model.ipynb) |
+| Engineer Derived Features | [02_Feature_Engineering_and_Baseline_Model.ipynb](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/02_Feature_Engineering_and_Baseline_Model.ipynb) |
+| Outlier & Distribution Checks | [02_Feature_Engineering_and_Baseline_Model.ipynb](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/02_Feature_Engineering_and_Baseline_Model.ipynb) |
+| Correlation & Driver Analysis | [Feature Correlation and Visualization.ipynb](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/Feature%20Correlation%20and%20Visualization.ipynb) |
+| Baseline Modeling (Linear → Polynomial) | [02_Feature_Engineering_and_Baseline_Model.ipynb](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/02_Feature_Engineering_and_Baseline_Model.ipynb) |
+| Baseline Performance Evaluation | [Performance Summary.ipynb](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/Performance%20Summary.ipynb) |
+| Data Output for Phase 3 | [phase2_features_baseline_models.csv](https://github.com/MHaynes33/BlackBox/blob/main/data/phase2_features_baseline_models.csv) |
 
-*This structure ensures complete traceability across the workflow.*
+*This structure ensures transparency and repeatability for every analytical step.*
 
 ---
 
-# 1. Loading & Validating the Clean Dataset  
-**Notebook:** `Notebooks/02_Feature_Engineering_and_Baseline_Model.ipynb`
+## 1. Loading & Validating the Clean Dataset  
+**Notebook:**  
+[02_Feature_Engineering_and_Baseline_Model.ipynb](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/02_Feature_Engineering_and_Baseline_Model.ipynb)
 
-Phase 2 begins by loading the Phase-1 output:
+Phase 2 begins by loading the Phase 1 output dataset.
 
 The notebook:
-
-- inspects the dataset shape  
+- inspects dataset shape and structure  
 - checks for missing values  
-- confirms that only **public cases (N=1000)** contain labels  
-- verifies that cleaned variables remain consistent after Phase-1 wrangling  
-
-**Purpose:** Ensure that the dataset is ready for transformation and modeling.
+- confirms that only **public cases (N = 1,000)** contain reimbursement labels  
+- verifies that cleaned variables remain consistent after Phase 1 wrangling  
 
 ---
 
-# 2. Engineering Derived Features  
-**Notebook:** `Notebooks/02_Feature_Engineering_and_Baseline_Model.ipynb`
+## 2. Engineering Derived Features  
+**Notebook:**  
+[02_Feature_Engineering_and_Baseline_Model.ipynb](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/02_Feature_Engineering_and_Baseline_Model.ipynb)
 
-The following metrics were engineered inside this notebook:
+To capture efficiency, balance, and nonlinear travel behavior, the following features are engineered:
 
-| Feature | Formula | Why It Was Created |
-|--------|---------|---------------------|
-| `cost_per_day` | receipts ÷ days | captures spending intensity per day |
-| `cost_per_mile` | receipts ÷ miles | measures efficiency relative to distance |
-| `miles_per_day` | miles ÷ days | captures travel pace |
-| `cost_ratio` | cost_per_day ÷ cost_per_mile | relationship between spending patterns |
+| Feature | Formula | Purpose |
+|--------|---------|---------|
+| `cost_per_day` | receipts ÷ days | Daily spending intensity |
+| `cost_per_mile` | receipts ÷ miles | Travel efficiency per mile |
+| `miles_per_day` | miles ÷ days | Daily travel intensity |
+| `cost_ratio` | cost_per_day ÷ cost_per_mile | Balance between time- and distance-based costs |
 
-These features were then:
-
-- cleaned for zero-division issues  
-- purged of NaN/infinite values  
-- validated with descriptive statistics  
-
-**Purpose:** Add behavioral dimensions that raw columns cannot capture.
+These features are:
+- protected against division-by-zero  
+- cleaned of NaN and infinite values  
+- validated using descriptive statistics  
 
 ---
 
-# 3. Outlier Detection & Feature Distribution Analysis  
-**Notebook:** `Notebooks/02_Feature_Engineering_and_Baseline_Model.ipynb`
+## 3. Outlier Detection & Feature Distribution Analysis  
+**Notebook:**  
+[02_Feature_Engineering_and_Baseline_Model.ipynb](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/02_Feature_Engineering_and_Baseline_Model.ipynb)
 
-Using IQR-based outlier detection, the notebook checks:
-
+Using an IQR-based approach, the notebook evaluates:
 - trip duration  
 - miles traveled  
-- receipts  
-- engineered features  
+- total receipts  
+- engineered efficiency features  
 
-Summary:
-
+**Summary findings:**
 - No extreme anomalies in core input features  
-- Right-skewed patterns appear in cost metrics (expected business behavior)  
-- Distributions confirm stability of engineered features  
-
-**Purpose:** Ensure engineered features do not introduce distortions harmful to modeling.
+- Engineered cost metrics show expected right-skewed behavior  
+- Feature distributions are stable and modeling-ready  
 
 ---
 
-# 4. Preparing the Modeling Dataset  
-**Notebook:** `Notebooks/02_Feature_Engineering_and_Baseline_Model.ipynb`
+## 4. Preparing the Modeling Dataset  
+**Notebook:**  
+[02_Feature_Engineering_and_Baseline_Model.ipynb](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/02_Feature_Engineering_and_Baseline_Model.ipynb)
 
-Seven numerical input features are selected:
-~trip_duration_days
-~miles_traveled
-~total_receipts_amount
-~cost_per_day
-~cost_per_mile
-~miles_per_day
-~cost_ratio
-Target: reimbursement
+Seven numeric predictors are selected:
 
-The notebook applies a **deterministic 75/25 split** (first 750 rows → train; next 250 → test).
+- `trip_duration_days`  
+- `miles_traveled`  
+- `total_receipts_amount`  
+- `cost_per_day`  
+- `cost_per_mile`  
+- `miles_per_day`  
+- `cost_ratio`  
 
-**Purpose:** Maintain reproducibility and align with instructor expectations.
+**Target variable:** `reimbursement`
 
----
-
-# 5. Baseline Model Development  
-**Notebook:** `Notebooks/02_Feature_Engineering_and_Baseline_Model.ipynb`
-
-The notebook fits four baseline models:
-
-## 5.1 Linear Regression  
-- Serves as the baseline for comparison  
-- Achieves ~0.784 R²  
-- Confirms strong linear influence of receipts, miles, and duration  
-
-## 5.2 Ridge Regression  
-- Adds L2 regularization  
-- Similar performance to Linear Regression  
-- Demonstrates feature stability  
-
-## 5.3 Lasso Regression  
-- Adds L1 regularization  
-- Does not eliminate features (all contribute)  
-
-## 5.4 Polynomial Regression (Degree 2)  
-- Introduces nonlinear interactions (e.g., miles × receipts)  
-- Achieves **highest R² (~0.892)**  
-- Indicates ACME’s true logic is nonlinear, tiered, or multiplicative  
-
-**Purpose:** Establish a baseline understanding of how much variance can be captured before adding Phase-3 business logic.
+A deterministic **75 / 25 train–test split** is applied:
+- first 750 public cases → training  
+- remaining 250 public cases → testing  
 
 ---
 
-# 6. Feature Correlation & Importance Analysis  
-**Notebook:** `Notebooks/Feature Correlation and Visualization.ipynb`
+## 5. Baseline Model Development  
+**Notebook:**  
+[02_Feature_Engineering_and_Baseline_Model.ipynb](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/02_Feature_Engineering_and_Baseline_Model.ipynb)
 
-This notebook conducts:
+Four baseline regression models are evaluated:
 
-- correlation heatmap visualization  
-- top-driver ranking  
-- coefficient analysis using a linear model  
+### 5.1 Linear Regression
+- Serves as the baseline comparator  
+- Achieves **R² ≈ 0.784**  
+- Confirms strong linear influence of receipts, mileage, and duration  
+
+### 5.2 Ridge Regression
+- Introduces L2 regularization  
+- Produces performance similar to Linear Regression  
+- Demonstrates coefficient stability  
+
+### 5.3 Lasso Regression
+- Introduces L1 regularization  
+- Retains all predictors (no feature elimination)  
+
+### 5.4 Polynomial Regression (Degree 2)
+- Introduces second-order terms and feature interactions  
+- Achieves the **highest baseline performance (R² ≈ 0.892)**  
+- Demonstrates that nonlinear interactions are required to approximate legacy behavior  
+
+---
+
+## 6. Feature Correlation & Driver Analysis  
+**Notebook:**  
+[Feature Correlation and Visualization.ipynb](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/Feature%20Correlation%20and%20Visualization.ipynb)
 
 Key findings:
-
-- `total_receipts_amount` = strongest predictor  
-- `miles_traveled` and `trip_duration_days` = meaningful contributors  
-- engineered features have low linear correlation but become important in nonlinear models  
-- polynomial modeling’s success is consistent with observed nonlinear structure  
-
-**Purpose:** Identify influential drivers and guide which nonlinear interactions matter in Phase 3.
+- `total_receipts_amount` is the strongest predictor  
+- `miles_traveled` and `trip_duration_days` are meaningful contributors  
+- Engineered features exhibit low linear correlation but support nonlinear modeling  
 
 ---
 
-# 7. Performance Evaluation & Limitations  
-**Notebook:** `Notebooks/Performance Summary.ipynb`
+## 7. Baseline Performance Evaluation  
+**Notebook:**  
+[Performance Summary.ipynb](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/Performance%20Summary.ipynb)
 
-This notebook evaluates:
-
+Baseline models are evaluated using:
 - MAE  
 - RMSE  
 - R²  
-- Exact-match rate  
-- Within-$1 and within-$5 accuracy  
 
-Findings:
-
-- R² is high (≈ 0.89), confirming strong behavioral approximation  
-- Exact-match rate and close-match rate are extremely low  
-- Indicates **the legacy system contains explicit rules**, such as:
-  - thresholds  
-  - nonlinear steps  
-  - rounding artifacts  
-  - bonuses/penalties  
-
-**Purpose:** Show where machine learning fails, motivating Phase-3 logic engineering.
+Results confirm:
+- Polynomial regression outperforms linear baselines  
+- Linear models capture global trends but miss nonlinear structure  
 
 ---
 
-# 8. Output for Phase 3  
-**File Generated By Notebook:**  
-`Notebooks/02_Feature_Engineering_and_Baseline_Model.ipynb`
+## 8. Phase 2 Outputs
 
-Output dataset: data/phase2_features_baseline_models.csv
+**Generated Dataset:**  
+[phase2_features_baseline_models.csv](https://github.com/MHaynes33/BlackBox/blob/main/data/phase2_features_baseline_models.csv)
 
-
-This file becomes the **official Phase-3 modeling input**, enriched with engineered features and validated for stability.
+This enriched dataset serves as the modeling input for Phase 3.
 
 ---
 
-# 9. What's done during Phase 2:  
+## 9. Phase 2 Summary
+
 Phase 2 successfully:
-
-- transformed raw data into a structured, behavior-rich ABT  
 - engineered features aligned with cost, duration, and efficiency patterns  
-- validated those features through distribution and outlier checks  
-- established linear and nonlinear baseline models  
-- demonstrated that complex, nonlinear interactions are required  
-- revealed the limits of ML-only modeling  
-- produced the enriched dataset for Phase 3  
-- highlighted the need to integrate PRD and interview-driven reimbursement logic  
+- validated engineered features through distribution and outlier checks  
+- established baseline regression models  
+- demonstrated that nonlinear interactions are required to approximate legacy behavior  
+- produced the enriched dataset used in Phase 3  
 
-By the end of Phase 2, the team had a validated feature set, baseline models, and the analytical insight required to begin reconstructing ACME’s hidden business rules in Phase 3.
+By the end of Phase 2, the project had a validated feature set, baseline performance benchmarks, and a modeling-ready dataset to support advanced nonlinear and ensemble modeling in Phase 3.
 
 
 ## 5. Key Findings
@@ -704,4 +679,6 @@ By the end of Phase 2, the team had a validated feature set, baseline models, an
 
 ## 6. Final Notes
 
-*To get a more detailed overview of the project check our presentation: for all other questions reach out to any of the members listed above*
+~ To get a more detailed overview of the project check our presentation: 
+
+~ For all other questions reach out to any of the members listed above
