@@ -25,7 +25,8 @@ Across four phases, our team:
 
 The resulting model achieves **high predictive accuracy (\~0.95 R²)** while maintaining interpretability, providing ACME a modern, transparent foundation for replacing/recreating its legacy reimbursement engine.
 
-## II. Repository Structure (work in progress)
+## II. Repository Structure (work in progress as we still need to delete some files)
+
 
 ## III. Phase by Phase Workflow Summary
 
