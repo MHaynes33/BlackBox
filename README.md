@@ -410,7 +410,7 @@ This project is organized into four sequential phases.  Each phase corresponds d
 
 ## Phase 1:  Data Validation, Statistical EDA, and Business Logic Review
 
-### Goal
+### Purpose
 *Prepare the ACME reimbursement datasets for downstream modeling by validating data integrity, performing exploratory analysis, and reviewing business-rule context derived from interviews and PRD documentation.*
 
 ### Inputs
@@ -481,11 +481,12 @@ https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/01_EDA_Reimbursement%2
 
 ## Phase 2: Feature Engineering & Baseline Modeling
 
-### Goal
-Engineer derived features and establish baseline regression benchmarks.
+### Purpose
+
+*Engineer derived features and establish baseline models and benchmarks.*
 
 ### Inputs
-- Phase 1 validated data (as used in Phase 2 notebooks)
+- Phase 1 validated data 
 
 ---
 
@@ -496,7 +497,7 @@ https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/02_Feature_Engineering
 **What this does**
 - Engineers derived efficiency features
 - Performs feature sanity checks
-- Trains baseline regression models
+- Trains baseline models
 
 **Outputs**
 - `data/phase2_features_baseline_models.csv`  
@@ -537,12 +538,12 @@ https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/Performance%20Summary.
 
 ---
 
-### Step 4 — Review Phase 2 EDA & Baseline Model Report
+### Step 4 — Review Phase 1 EDA & Baseline Model Report
 **Report:** `reports/EDA & Baseline Model Info.html`  
 https://github.com/MHaynes33/BlackBox/blob/main/reports/EDA%20%26%20Baseline%20Model%20Info.html
 
 **What this contains**
-- Phase 2 EDA recap
+- Phase 1 EDA recap
 - Statistical summaries
 - Baseline model documentation and results
 
@@ -559,7 +560,7 @@ https://github.com/MHaynes33/BlackBox/blob/main/reports/EDA%20%26%20Baseline%20M
 https://github.com/MHaynes33/BlackBox/blob/main/reports/Feature%20Definitions%20and%20Rationales%20Table%20Updated%20.html
 
 **What this contains**
-- Authoritative feature definitions
+- Feature definitions
 - Feature engineering rationale
 - Target variable documentation
 
@@ -578,9 +579,9 @@ https://github.com/MHaynes33/BlackBox/blob/main/reports/Feature%20Definitions%20
 
 ---
 
-## Phase 3 — Nonlinear & Ensemble Modeling
+## Phase 3: Nonlinear & Ensemble Modeling
 
-### Goal
+### Purpose
 Evaluate nonlinear and ensemble regression models and generate holdout predictions.
 
 ### Inputs
@@ -627,19 +628,19 @@ Ensemble performance metrics
 
 ---
 
-Phase 4: Model Interpretability & Feature-Impact Analysis
+## Phase 4: Model Interpretability & Feature-Impact Analysis
 
-Goal
+### Purpose
 
 Explain model behavior and validate alignment with PRD documentation and employee interviews.
 
-Inputs
+### Inputs
 
 data/phase2_features_baseline_models.csv
 
 data/phase3_predictions.csv
 
-Step 1 — Interpretability Analysis
+### Step 1: Interpretability Analysis
 
 Notebook: Notebooks/Model Interpretability & Feature-Impact Analysis.ipynb
 https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/Model%20Interpretability%20%26%20Feature-Impact%20Analysis.ipynb
