@@ -419,7 +419,7 @@ This project is organized into four sequential phases.  Each phase corresponds d
 
 ---
 
-### Step 1 — Data Validation & Cleaning
+### Step 1: Data Validation & Cleaning
 **Notebook:** `Notebooks/week1_data_cleaning.ipynb`  
 https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/week1_data_cleaning.ipynb
 
@@ -438,7 +438,7 @@ https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/week1_data_cleaning.ip
 
 ---
 
-### Step 2 — Statistical EDA & Dataset Comparison
+### Step 2: Statistical EDA & Dataset Comparison
 **Notebook:** `Notebooks/01_EDA_Reimbursement (3).ipynb`  
 https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/01_EDA_Reimbursement%20(3).ipynb
 
@@ -458,7 +458,7 @@ https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/01_EDA_Reimbursement%2
 
 ---
 
-### Step 3 — Business Logic Summary Review
+### Step 3: Business Logic Summary Review
 **Report:** `reports/Business_logic_summary.html`
 
 **What this contains**
@@ -490,7 +490,7 @@ https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/01_EDA_Reimbursement%2
 
 ---
 
-### Step 1 — Feature Engineering & Baseline Models
+### Step 1: Feature Engineering & Baseline Models
 **Notebook:** `Notebooks/02_Feature_Engineering_and_Baseline_Model.ipynb`  
 https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/02_Feature_Engineering_and_Baseline_Model.ipynb
 
@@ -508,7 +508,7 @@ https://github.com/MHaynes33/BlackBox/blob/main/data/phase2_features_baseline_mo
 
 ---
 
-### Step 2 — Correlation & Driver Analysis
+### Step 2: Correlation & Driver Analysis
 **Notebook:** `Notebooks/Feature Correlation and Visualization.ipynb`  
 https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/Feature%20Correlation%20and%20Visualization.ipynb
 
@@ -523,7 +523,7 @@ https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/Feature%20Correlation%
 
 ---
 
-### Step 3 — Baseline Performance Summary
+### Step 3: Baseline Performance Summary
 **Notebook:** `Notebooks/Performance Summary.ipynb`  
 https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/Performance%20Summary.ipynb
 
@@ -538,7 +538,7 @@ https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/Performance%20Summary.
 
 ---
 
-### Step 4 — Review Phase 1 EDA & Baseline Model Report
+### Step 4: Review Phase 1 EDA & Baseline Model Report
 **Report:** `reports/EDA & Baseline Model Info.html`  
 https://github.com/MHaynes33/BlackBox/blob/main/reports/EDA%20%26%20Baseline%20Model%20Info.html
 
@@ -555,7 +555,7 @@ https://github.com/MHaynes33/BlackBox/blob/main/reports/EDA%20%26%20Baseline%20M
 
 ---
 
-### Step 5 — Review Feature Definitions & Rationales
+### Step 5: Review Feature Definitions & Rationales
 **Report:** `reports/Feature Definitions and Rationales Table Updated.html`  
 https://github.com/MHaynes33/BlackBox/blob/main/reports/Feature%20Definitions%20and%20Rationales%20Table%20Updated%20.html
 
@@ -645,7 +645,7 @@ data/phase3_predictions.csv
 Notebook: Notebooks/Model Interpretability & Feature-Impact Analysis.ipynb
 https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/Model%20Interpretability%20%26%20Feature-Impact%20Analysis.ipynb
 
-What this does
+**What this does**
 
 Reviews feature importance and impact
 
@@ -653,25 +653,19 @@ Examines thresholds and residual patterns
 
 Connects model behavior to business logic
 
-Outputs
+**Outputs**
 
-Interpretive plots and narrative explanations
+~ Interpretive plots and narrative explanations
 
-No datasets written
+~ No datasets written
 
-How to run
+**How to run**
 
 Open the notebook and run all cells.
 
-Project Completion
+---
 
-After completing all four phases, the repository provides:
-
-A reproducible ML workflow
-
-Holdout predictions for audit
-
-Interpretability analysis supporting stakeholder trust
+### Project Phase by Phase Steps Complete!
 ---
 
 
