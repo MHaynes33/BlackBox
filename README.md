@@ -677,6 +677,154 @@ Phase 2 successfully:
 
 By the end of Phase 2, the project had a validated feature set, baseline performance benchmarks, and a modeling-ready dataset to support advanced nonlinear and ensemble modeling in Phase 3.
 
+---
+
+## Phase 3: Modeling Outlook & integration Plan
+
+### Goal
+
+*Advance beyond Phase 2 polynomial baselines by evaluating nonlinear and
+ensemble modeling strategies capable of capturing ACME’s tiered, nonlinear,
+and diminishing-return reimbursement logic. Phase 3 introduces a structured
+modeling pipeline, evaluates individual nonlinear regressors, integrates PRDdriven business logic features, and develops a calibrated stacking ensemble
+that most closely replicates ACME’s 60-year-old legacy system.*
+
+---
+
+### Phase 3 Input Data
+
+All Phase 3 workflows use the enriched dataset produced at the end of Phase 2:
+
+- **Dataset:**  
+  [data/phase2_features_baseline_models.csv](https://github.com/MHaynes33/BlackBox/blob/main/data/phase2_features_baseline_models.csv)
+
+This dataset contains engineered features and the observed `reimbursement` values for public cases.
+
+---
+
+### Phase 3 Workflow Overview
+
+Phase 3 consists of three core steps:
+
+1. Nonlinear and ensemble model training  
+2. Holdout performance evaluation  
+3. Granular hit-rate analysis  
+
+Each step is implemented using a dedicated notebook or script to ensure reproducibility.
+
+---
+
+### 1. Model Development & Integration
+
+**Notebook:**  
+[Notebooks/Model Development & Integration.ipynb](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/Model%20Development%20%26%20Integration.ipynb)
+
+This notebook performs the primary Phase 3 modeling.
+
+**Modeling setup**
+- **Features used (7):**
+  - `trip_duration_days`
+  - `miles_traveled`
+  - `total_receipts_amount`
+  - `cost_per_day`
+  - `cost_per_mile`
+  - `miles_per_day`
+  - `cost_ratio`
+- **Target variable:** `reimbursement`
+- **Train/test split:** 75% training, 25% testing
+
+**Models trained**
+- Decision Tree  
+- Random Forest  
+- Gradient Boosting  
+- Support Vector Regression (SVR)  
+- MLP Neural Network  
+- **Stacking Ensemble**
+
+Each model is evaluated using:
+- Mean Absolute Error (MAE)
+- Root Mean Squared Error (RMSE)
+- Coefficient of Determination (R²)
+
+An **Actual vs. Predicted** scatter plot is generated for the stacking ensemble to visually assess model alignment.
+
+---
+
+### 2. Holdout Performance Metrics
+
+**Script:**  
+[scripts/phase3_performance_metrics.py](https://github.com/MHaynes33/BlackBox/blob/main/scripts/phase3_performance_metrics.py)
+
+This script provides a reproducible holdout evaluation of the Phase 3 stacking ensemble.
+
+**Evaluation procedure**
+- Loads `data/phase2_features_baseline_models.csv`
+- Applies an **index-based 75 / 25 holdout split**
+- Trains a stacking ensemble composed of:
+  - Decision Tree
+  - Random Forest
+  - Gradient Boosting
+  - Linear Regression meta-model
+- Reports:
+  - MAE
+  - RMSE
+  - R²
+  - Exact match rate (≤ $0.01)
+  - Within-$1 accuracy
+  - Within-$5 accuracy
+
+**Output**
+- **Holdout predictions:**  
+  [data/phase3_predictions.csv](https://github.com/MHaynes33/BlackBox/blob/main/data/phase3_predictions.csv)
+
+This file contains the **actual reimbursement values and corresponding model predictions** for each holdout observation, supporting reproducibility and external audit.
+
+---
+
+### 3. Granular Accuracy & Hit Rates
+
+**Notebook:**  
+[Notebooks/Model Hit Rates.ipynb](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/Model%20Hit%20Rates.ipynb)
+
+This notebook examines fine-grained prediction accuracy by analyzing exact and near-exact reimbursement matches.  
+It highlights cent-level discrepancies caused by rounding and stochastic behavior embedded in ACME’s legacy reimbursement system.
+
+---
+
+### Phase 3 Results Summary
+
+Phase 3 demonstrates that:
+
+- Linear and baseline models are insufficient to capture ACME’s reimbursement logic
+- Tree-based and ensemble models effectively capture nonlinear and tiered behavior
+- The **stacking ensemble** achieves the strongest overall performance across MAE, RMSE, and R²
+- Despite strong global accuracy, exact cent-level matches remain rare due to legacy rounding effects
+
+---
+
+### Phase 3 Outputs
+
+At the conclusion of Phase 3, the following artifacts are produced:
+
+- Holdout prediction file:  
+  `data/phase3_predictions.csv`
+- Global performance metrics (MAE, RMSE, R²) for the various models as shown on the notebook: [Notebooks/Model Development & Integration.ipynb](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/Model%20Development%20%26%20Integration.ipynb)
+- Granular hit-rate statistics as shown on: [Notebooks/Model Hit Rates.ipynb](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/Model%20Hit%20Rates.ipynb)
+---
+
+*Phase 3 is complete*
+
+Phase 3 Final Takeaway:
+The stacking ensemble achieves:
+• Best overall predictive accuracy compare to other models generated
+• Strong generalization across trip types
+• Alignment with business logic discovered in Phases 1–2
+• A reliable foundation for further interpretability work
+
+
+
+
+
 
 ## 5. Key Findings
 
