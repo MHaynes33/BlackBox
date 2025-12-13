@@ -809,33 +809,56 @@ Ensemble performance metrics
 ## Phase 4: Model Interpretability & Feature-Impact Analysis
 
 ### Purpose
-
-Explain model behavior and validate alignment with PRD documentation and employee interviews.
+Explain Phase 3 model behavior, validate alignment with PRD documentation and employee interviews, and diagnose why cent-level matching remains rare even when global accuracy is high.
 
 ### Inputs
-
 - `data/phase2_features_baseline_models.csv`
 - `data/phase3_predictions.csv`
 
-### Step 1: Interpretability Analysis
+------------------------------------------------------------------------
 
-Notebook: Notebooks/Model Interpretability & Feature-Impact Analysis.ipynb
-https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/Model%20Interpretability%20%26%20Feature-Impact%20Analysis.ipynb
+### Step 1: Interpretability & Feature-Impact Analysis
+
+**Notebook:** `Notebooks/Model Interpretability & Feature-Impact Analysis.ipynb`  
+<https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/Model%20Interpretability%20%26%20Feature-Impact%20Analysis.ipynb>
 
 **What this does**
-
-- Reviews feature importance and impact
-- Examines thresholds and residual patterns
-- Connects model behavior to business logic
+- Reviews feature importance and feature impact patterns
+- Examines threshold-like behavior learned by tree-based models
+- Interprets residual behavior and ties model behavior back to PRD/interview business logic
 
 **Outputs**
-
-- Interpretive plots and narrative explanations
+- Interpretive plots and narrative explanations (in-notebook)
 - No datasets written
 
 **How to run**
+- Open the notebook and run all cells sequentially
 
-- Open the notebook and run all cells.
+------------------------------------------------------------------------
+
+### Step 2: Diagnostic Calibration & Residual Modeling (Post-Processing Experiment)
+
+**Notebook:** `Notebooks/Calibrated Ensemble Performance (with Residual Model).ipynb`  
+<https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/Calibrated%20Ensemble%20Performance%20(with%20Residual%20Model).ipynb)>
+
+> **Important:** This notebook is Phase 4 *diagnostic post-processing* and does **not** replace the official Phase 3 stacking ensemble model.  
+> It is used to evaluate generalization behavior, residual structure, and whether small post-hoc corrections reduce error without changing the underlying learned logic.
+
+**What this does**
+- Adds PRD-inspired diagnostic features (e.g., spend bands, receipt-cent flags, efficiency sweet-spot indicators)
+- Trains a **regularized stacking ensemble** and reports MAE/RMSE/$R^2$
+- Trains a **regularized residual correction model** to test whether remaining errors are systematic
+- Runs train vs. test diagnostics to assess over/underfitting and generalization gaps
+- Computes match-rate thresholds (Exact ≤ \$0.01, ≤ \$1, and ±\$5)
+
+**Outputs**
+- Prints calibrated performance metrics and match rates inside the notebook
+- Diagnostic evidence supporting whether residual mismatch is structured or consistent with legacy rounding/noise behavior
+- No required project artifacts for downstream phases (Phase 4 is interpretability/diagnostic-focused)
+
+**How to run**
+- Open the notebook and run all cells sequentially
+- Confirm the input path points to `data/phase2_features_baseline_models.csv` 
 
 ---
 ### Project Phase by Phase Steps Complete!
