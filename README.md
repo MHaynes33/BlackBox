@@ -395,7 +395,7 @@ Phase 4 confirms that the final stacking ensemble:
 
 **Relevant File for Phase 4**
 
-## 4. How to Run this Project (Phase by Phase)
+## IV. How to Run this Project (Phase by Phase)
 ## Phase 1 — How to Run the Data Validation, Statistical EDA, and Business Logic Review
 
 Phase 1 prepares the ACME reimbursement datasets for all downstream modeling.  
@@ -826,10 +826,10 @@ The stacking ensemble achieves:
 
 
 
-## 5. Key Findings
+## V. Key Findings & How to Run the Model
 
 
-## 6. Final Notes
+## VI. Final Notes
 
 ~ To get a more detailed overview of the project check our presentation: 
 
