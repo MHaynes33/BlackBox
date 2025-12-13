@@ -5,9 +5,6 @@
   // The book's author.
   author: "Author",
 
-  // The book's author.
-  species: "default species",
-
   // The paper size to use.
   paper: "a4",
   
@@ -18,7 +15,8 @@
   set document(title: title, author: author)
 
   // Set the body font.
-  set text(font: "Source Sans Pro")
+  // Use a widely available font to avoid missing-font warnings on render.
+  set text(font: "Arial")
 
   // Configure the page properties.
   set page(
@@ -44,7 +42,6 @@
         #text(size: 2.5em, fill: white)[*#title*]
     ]
     #v(2em, weak: true)
-    #text(size: 1.6em)[Species: *#species*]
     #body
   ])
 

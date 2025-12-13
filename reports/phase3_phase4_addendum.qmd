@@ -1,0 +1,185 @@
+---
+title: "Phase 3 & 4 Addendum"
+format:
+  typst-pdf:
+    template-partials:
+      - typst-show.typ
+      - typst-template.typ
+---
+
+## Purpose
+This addendum captures new findings from Phase 3 (ensemble learning and integration) and Phase 4 (model interpretability and feature impact). It is meant to be appended to `project_Summary.qmd` later; no changes were made to the existing summary.
+
+## Phase 3 — Ensemble Learning & Integration
+
+### Goal
+Improve accuracy over Phase 2 baselines by blending complementary model families while keeping the pipeline aligned with legacy business logic.
+
+### What we did
+- Trained diverse regressors on Phase 2 feature set: Decision Tree, Random Forest, Gradient Boosting, SVR, MLP.
+- Built a Stacking Ensemble (tree-based base models + linear meta-learner, passthrough features).
+- Kept the same engineered features as Phase 2 (cost_per_day, cost_per_mile, miles_per_day, cost_ratio) to preserve feature logic.
+- Saved the production artifact as `src/final_model.pkl` and a CLI wrapper `src/predict.py` that applies identical feature engineering.
+
+### Key evidence
+- Stacking Ensemble achieved the highest R² and lowest errors among Phase 3 runs (outperformed individual trees, boosting, SVR, and MLP).
+- Manual 75/25 split showed the ensemble kept variance in check while capturing the nonlinear mileage/receipts patterns identified earlier.
+- Feature importance across the stack remained dominated by receipts and miles, confirming alignment with Phase 1/2 insights.
+- See chart: actual vs predicted with MAE/RMSE/R² for the stacking ensemble (below).
+
+### Takeaway (business view)
+The ensemble better mirrors the layered logic of the legacy engine (linear plus thresholds), delivering the closest match to historical reimbursements without changing the feature story.
+
+```{=typst}
+#pagebreak()
+```
+
+### Phase 3 visuals
+
+```{python}
+#| echo: false
+#| warning: false
+#| message: false
+#| fig-width: 6
+#| fig-height: 4
+#| fig-cap: "Actual vs predicted reimbursements (Phase 3 stacking ensemble)."
+#| fig-align: "center"
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from math import sqrt
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+from sklearn.ensemble import StackingRegressor, RandomForestRegressor, GradientBoostingRegressor
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.linear_model import LinearRegression
+
+def load_df():
+    try:
+        return pd.read_csv("../data/phase2_features_baseline_models.csv")
+    except FileNotFoundError:
+        return pd.read_csv("data/phase2_features_baseline_models.csv")
+
+df = load_df()
+features = [
+    "trip_duration_days",
+    "miles_traveled",
+    "total_receipts_amount",
+    "cost_per_day",
+    "cost_per_mile",
+    "miles_per_day",
+    "cost_ratio",
+]
+y = df["reimbursement"]
+X = df[features]
+
+# Train a stacking ensemble (matches the Phase 3 recipe)
+base_models = [
+    ("decision_tree", DecisionTreeRegressor(random_state=42)),
+    ("random_forest", RandomForestRegressor(n_estimators=200, random_state=42)),
+    ("gradient_boosting", GradientBoostingRegressor(random_state=42)),
+]
+meta_model = LinearRegression()
+model = StackingRegressor(estimators=base_models, final_estimator=meta_model, passthrough=True)
+model.fit(X, y)
+pred = model.predict(X)
+
+mae = mean_absolute_error(y, pred)
+rmse = sqrt(mean_squared_error(y, pred))
+r2 = r2_score(y, pred)
+
+plt.figure(figsize=(6, 4))
+sns.scatterplot(x=y, y=pred, alpha=0.6, color="teal")
+lims = [min(y.min(), pred.min()), max(y.max(), pred.max())]
+plt.plot(lims, lims, "r--", linewidth=1)
+plt.xlabel("Actual reimbursement")
+plt.ylabel("Predicted reimbursement")
+plt.title(f"Actual vs Predicted (MAE={mae:.2f}, RMSE={rmse:.2f}, R²={r2:.3f})")
+plt.tight_layout()
+```
+
+## Phase 4 — Model Interpretability & Feature Impact
+
+### Goal
+Explain the Phase 3 model’s behavior, confirm it matches interview/PRD expectations, and surface the business rules it appears to learn.
+
+### What we did
+- Ran feature importance and qualitative checks on the stacking ensemble and tree models.
+- Reviewed engineered features to see whether they materially change driver rankings.
+- Compared learned patterns against business hypotheses from Phase 1 interviews.
+
+### Key evidence
+- **Top drivers:** total_receipts_amount (primary), miles_traveled (secondary with nonlinear bands), trip_duration_days (moderate/per-diem-like).
+- Engineered ratios (cost_per_day, cost_per_mile, miles_per_day, cost_ratio) improved fit but ranked below the three core fields; they help capture nonlinear edges rather than redefine importance.
+- Tree models exposed mileage brackets and high-receipt zones, echoing interview hints about banded reimbursements and spend tiers.
+- See chart: permutation importance for the stacking ensemble (below) to show feature influence.
+
+### Takeaway (business view)
+The model’s logic aligns with stakeholder intuition: receipts dominate, mileage adjusts payouts in bands, and duration adds smaller structured adjustments. The ensemble preserves accuracy while making it clear which levers drive reimbursements, increasing trust in the reverse-engineered system.
+
+### Phase 4 visuals
+
+```{python}
+#| echo: false
+#| warning: false
+#| message: false
+#| fig-width: 6
+#| fig-height: 4
+#| fig-cap: "Permutation importance for the stacking ensemble (higher bars = stronger influence)."
+#| fig-align: "center"
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.inspection import permutation_importance
+from sklearn.ensemble import StackingRegressor, RandomForestRegressor, GradientBoostingRegressor
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.linear_model import LinearRegression
+
+def load_df():
+    try:
+        return pd.read_csv("../data/phase2_features_baseline_models.csv")
+    except FileNotFoundError:
+        return pd.read_csv("data/phase2_features_baseline_models.csv")
+
+df = load_df()
+features = [
+    "trip_duration_days",
+    "miles_traveled",
+    "total_receipts_amount",
+    "cost_per_day",
+    "cost_per_mile",
+    "miles_per_day",
+    "cost_ratio",
+]
+y = df["reimbursement"]
+X = df[features]
+
+# Train a stacking ensemble to mirror Phase 3
+base_models = [
+    ("decision_tree", DecisionTreeRegressor(random_state=42)),
+    ("random_forest", RandomForestRegressor(n_estimators=200, random_state=42)),
+    ("gradient_boosting", GradientBoostingRegressor(random_state=42)),
+]
+meta_model = LinearRegression()
+model = StackingRegressor(estimators=base_models, final_estimator=meta_model, passthrough=True)
+model.fit(X, y)
+
+# Sample to keep runtime modest
+sample = min(250, len(X))
+rs = np.random.RandomState(42)
+idx = rs.choice(len(X), size=sample, replace=False)
+X_s, y_s = X.iloc[idx], y.iloc[idx]
+
+perm = permutation_importance(model, X_s, y_s, n_repeats=10, random_state=42, n_jobs=1)
+importance = (
+    pd.Series(perm.importances_mean, index=features)
+    .sort_values(ascending=False)
+)
+
+plt.figure(figsize=(6, 4))
+sns.barplot(x=importance.values, y=importance.index, color="slateblue")
+plt.xlabel("Permutation importance (mean decrease in score)")
+plt.ylabel("Feature")
+plt.title("Feature influence on reimbursement (ensemble)")
+plt.tight_layout()
+```

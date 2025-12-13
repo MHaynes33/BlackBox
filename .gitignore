@@ -230,4 +230,5 @@ __marimo__/
 combined_clean.csv
 public_clean.csv
 private_clean.csv
+reports/local_backups/
 
