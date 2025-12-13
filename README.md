@@ -134,14 +134,21 @@ These findings directly informed the engineered features in Phase 2 and the nonl
 
 
 **Files Relevant to this Phase**
+
 ~ Notebooks/01_EDA_Reimbursement (3).ipynb
+
 ~ BlackBox/reports/Business_logic_summary.html
-~ reports/Phase1_summary.qmd
+
 ~ Notebooks/week1_data_cleaning.ipynb
+
 ~ data/private_cases.json
+
 ~ data/public_cases.json
+
 ~ data/combined_clean.csv
+
 ~ src/INTERVIEWS.md
+
 ~ src/PRD.md
 
 ---
@@ -242,11 +249,17 @@ The dataset, engineered features, and baseline performance results fully prepare
 #### Phase 2 Relevant Sources:
 
 **Files Relevant to this Phase**
+
 ~ data/phase2_features_baseline_models.csv
+
 ~ Notebooks/02_Feature_Engineering_and_Baseline_Model.ipynb
+
 ~ Notebooks/Feature Correlation and Visualization.ipynb
+
 ~ Notebooks/Performance Summary.ipynb
+
 ~ reports/EDA & Baseline Model Info.html
+
 ~ reports/Feature Definitions and Rationales Table Updated .html
 
 ---
@@ -395,6 +408,7 @@ Phase 4 confirms that the final stacking ensemble:
 ---
 
 **Files Relevant to this Phase**
+
 ~ Notebooks/Model Interpretability & Feature-Impact Analysis.ipynb
 
 ---
@@ -579,7 +593,7 @@ https://github.com/MHaynes33/BlackBox/blob/main/reports/Feature%20Definitions%20
 
 ---
 
-## Phase 3: Nonlinear & Ensemble Modeling
+## Phase 3: Nonlinear & Ensemble Modeling (need help!)
 
 ### Purpose
 Evaluate nonlinear and ensemble regression models and generate holdout predictions.
@@ -589,7 +603,7 @@ Evaluate nonlinear and ensemble regression models and generate holdout predictio
 
 ---
 
-### Step 1 — Model Development & Integration
+### Step 1: Model Development & Integration
 **Notebook:** `Notebooks/Model Development & Integration.ipynb`  
 https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/Model%20Development%20%26%20Integration.ipynb
 
@@ -605,7 +619,7 @@ https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/Model%20Development%20
 
 ---
 
-### Step 2 — Holdout Metrics & Predictions
+### Step 2: Holdout Metrics & Predictions
 **Script:** `scripts/phase3_performance_metrics.py`  
 https://github.com/MHaynes33/BlackBox/blob/main/scripts/phase3_performance_metrics.py
 
@@ -664,7 +678,6 @@ Connects model behavior to business logic
 Open the notebook and run all cells.
 
 ---
-
 ### Project Phase by Phase Steps Complete!
 ---
 
