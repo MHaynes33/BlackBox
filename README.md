@@ -638,9 +638,8 @@ Explain model behavior and validate alignment with PRD documentation and employe
 
 ### Inputs
 
-data/phase2_features_baseline_models.csv
-
-data/phase3_predictions.csv
+- `data/phase2_features_baseline_models.csv`
+- `data/phase3_predictions.csv`
 
 ### Step 1: Interpretability Analysis
 
@@ -649,21 +648,18 @@ https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/Model%20Interpretabili
 
 **What this does**
 
-Reviews feature importance and impact
-
-Examines thresholds and residual patterns
-
-Connects model behavior to business logic
+- Reviews feature importance and impact
+- Examines thresholds and residual patterns
+- Connects model behavior to business logic
 
 **Outputs**
 
-~ Interpretive plots and narrative explanations
-
-~ No datasets written
+- Interpretive plots and narrative explanations
+- No datasets written
 
 **How to run**
 
-Open the notebook and run all cells.
+- Open the notebook and run all cells.
 
 ---
 ### Project Phase by Phase Steps Complete!
