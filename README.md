@@ -393,7 +393,10 @@ Phase 4 confirms that the final stacking ensemble:
 
 ---
 
-**Relevant File for Phase 4**
+**Files Relevant to this Phase**
+~ Notebooks/Model Interpretability & Feature-Impact Analysis.ipynb
+
+---
 
 ## IV. How to Run this Project (Phase by Phase)
 ## Phase 1 — How to Run the Data Validation, Statistical EDA, and Business Logic Review
