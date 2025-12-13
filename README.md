@@ -33,6 +33,7 @@ The resulting model achieves **high predictive accuracy (\~0.95 R²)** while mai
 
 ### Main Branch Structure
 
+```text
 ├── Notebooks/
 ├── data/
 ├── reports/
@@ -42,10 +43,11 @@ The resulting model achieves **high predictive accuracy (\~0.95 R²)** while mai
 ├── .idea/
 ├── README.md
 └── LICENSE
-
-### File Guide
+```
 
 ---
+
+### File Guide
 
 ### `Notebooks/` — Phase-Driven Analysis & Modeling
 
