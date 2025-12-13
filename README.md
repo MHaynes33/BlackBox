@@ -241,8 +241,12 @@ The dataset, engineered features, and baseline performance results fully prepare
 #### Phase 2 Relevant Sources:
 
 **Files Relevant to this Phase**
-
-**Technical Tools Used**
+~ data/phase2_features_baseline_models.csv
+~ Notebooks/02_Feature_Engineering_and_Baseline_Model.ipynb
+~ Notebooks/Feature Correlation and Visualization.ipynb
+~ Notebooks/Performance Summary.ipynb
+~ reports/EDA & Baseline Model Info.html
+~ reports/Feature Definitions and Rationales Table Updated .html
 
 ---
 
