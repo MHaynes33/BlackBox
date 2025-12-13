@@ -882,6 +882,6 @@ All results are presented as narrative explanations and visualizations (table/ch
 
 ## VI. Final Notes
 
-~ To get a more detailed overview of the project check our presentation: 
+~ To get a more detailed overview of the project check our presentation: https://github.com/MHaynes33/BlackBox/blob/main/presentation/Final-Presentation-Phase-1-4.pdf
 
 ~ For all other questions reach out to any of the members listed above
