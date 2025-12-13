@@ -69,6 +69,7 @@ Interactive, narrative-driven Jupyter notebooks used to explore data, engineer f
 - **Phase 3: Nonlinear & Ensemble Modeling**
   - `Model Development & Integration.ipynb`
   - `Phase3_Performance.ipynb`
+  - `Phase3_Performance_Metrics.ipynb`
 
 - **Phase 4: Model Interpretability**
   - `Model Interpretability & Feature-Impact Analysis.ipynb`
