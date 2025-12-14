@@ -16,6 +16,7 @@ def main():
     if not data_path.exists():
         data_path = Path("../data/phase2_features_baseline_models.csv")
     df = pd.read_csv(data_path)
+    data_dir = data_path.parent
 
     features = [
         "trip_duration_days",
@@ -67,7 +68,8 @@ def main():
             "AbsDiff": abs_diff,
         }
     )
-    out_path = Path("data/phase3_predictions.csv")
+    out_path = data_dir / "phase3_predictions.csv"
+    out_path.parent.mkdir(parents=True, exist_ok=True)
     out.to_csv(out_path, index=False)
     print(f"Saved predictions to {out_path}")
 
