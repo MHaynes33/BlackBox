@@ -520,10 +520,17 @@ https://github.com/MHaynes33/BlackBox/blob/main/reports/Feature%20Definitions%20
 
 ---
 
-## Phase 3: Nonlinear & Ensemble Modeling (need help!)
+## Phase 3: Nonlinear & Ensemble Modeling
 
 ### Purpose
-Evaluate nonlinear and ensemble regression models and generate holdout predictions.
+Evaluate nonlinear and ensemble regression models capable of capturing ACME’s
+tiered, nonlinear, and diminishing-return reimbursement logic, and select a
+final production-quality model for interpretability analysis in Phase 4.
+
+This phase produces the **official Phase 3 stacking ensemble model** and
+generates holdout predictions for downstream analysis.
+
+---
 
 ### Inputs
 - `data/phase2_features_baseline_models.csv`
@@ -531,41 +538,59 @@ Evaluate nonlinear and ensemble regression models and generate holdout predictio
 ---
 
 ### Step 1: Model Development & Integration
-**Notebook:** `Notebooks/Model Development & Integration.ipynb`  
+
+**Notebook:**  
+`Notebooks/Model Development & Integration.ipynb`  
 https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/Model%20Development%20%26%20Integration.ipynb
 
-**What this does**
-- Trains nonlinear and ensemble models
-- Generates predicted vs. actual plots
+#### What this does
+- Loads the Phase 2 engineered feature dataset
+- Applies a 75% / 25% train–test split
+- Trains multiple nonlinear regression models:
+  - Decision Tree
+  - Random Forest
+  - Gradient Boosting
+  - Support Vector Regression (SVR)
+  - MLP Neural Network
+- Trains a **stacking ensemble** combining tree-based and smooth learners
+- Evaluates all models using MAE, RMSE, and R²
+- Generates Actual vs. Predicted plots for visual assessment
 
-**Outputs**
-- Inline evaluation results
+#### Outputs
+- Inline evaluation metrics and comparison tables
+- Diagnostic plots (no files written)
 
-**How to run**
-- Open the notebook and run all cells.
+#### How to run
+Open the notebook in JupyterLab and run all cells sequentially.
 
 ---
 
-### Step 2: Holdout Metrics & Predictions
-**Script:** `scripts/phase3_performance_metrics.py`  
+### Step 2: Holdout Metrics & Prediction Generation
+
+**Script:**  
+`scripts/phase3_performance_metrics.py`  
 https://github.com/MHaynes33/BlackBox/blob/main/scripts/phase3_performance_metrics.py
 
-**What this does**
-- Runs a 75/25 holdout evaluation
-- Reports MAE, RMSE, R², and within-$ thresholds
-- Writes holdout predictions
+#### What this does
+- Loads the Phase 2 modeling dataset
+- Re-trains the **final Phase 3 stacking ensemble**
+- Evaluates performance on a 75% / 25% holdout split
+- Reports:
+  - MAE
+  - RMSE
+  - R²
+  - Granular match rates (≤ $0.01, ≤ $1.00, ± $5.00)
+- Writes holdout predictions for auditability and interpretability
 
-**Outputs**
+#### Outputs
 - `data/phase3_predictions.csv`  
-https://github.com/MHaynes33/BlackBox/blob/main/data/phase3_predictions.csv
+  https://github.com/MHaynes33/BlackBox/blob/main/data/phase3_predictions.csv
 
+#### How to run
+From the repository root:
+```bash
 python scripts/phase3_performance_metrics.py
-
-Phase 3 Outputs Summary
-
-Holdout predictions
-
-Ensemble performance metrics
+```
 
 ---
 
