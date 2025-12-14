@@ -27,22 +27,25 @@ The resulting model achieves **high predictive accuracy (\~0.95 R²)** while mai
 - ------------------------------------------------------------------------
 ## II. Repository Structure
 
-*This repository is organized to support the **full, phase-by-phase reverse-engineering workflow** used to reconstruct ACME’s legacy reimbursement engine. The structure intentionally separates **exploratory analysis**, **data artifacts**, **formal documentation**, and **production-style execution logic**, while maintaining clear traceability across **Phases 1–4**.*
+*This repository is organized to support a phase-by-phase reverse-engineering workflow used to reconstruct ACME’s legacy reimbursement engine. The structure separates exploratory notebooks, data artifacts, formal documentation, evaluation scripts, and the final executable reimbursement engine while maintaining clear traceability across Phases 1–4.*
 
 ---
 
-### Main Branch Structure
+### Main Structure
 
 ```text
+├── .idea/
 ├── Notebooks/
 ├── data/
+├── presentation/
 ├── reports/
 ├── scripts/
 ├── src/
-├── presentation/
-├── .idea/
+├── .gitignore
+├── LICENSE
 ├── README.md
-└── LICENSE
+└── deleteme.txt
+
 ```
 
 ---
