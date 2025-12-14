@@ -52,158 +52,137 @@ The resulting model achieves **high predictive accuracy (\~0.95 R²)** while mai
 
 ### File Guide
 
-### `Notebooks/` — Phase-Driven Analysis & Modeling
+------------------------------------------------------------------------
+
+### `Notebooks/` — Phase-Driven Analysis, Modeling, and Diagnostics
 
 **Purpose**  
-Interactive, narrative-driven Jupyter notebooks used to explore data, engineer features, train models, evaluate performance, and interpret results.
+Narrative-driven Jupyter notebooks used to explore data, engineer features, train models, evaluate performance, and interpret results.
 
 **Phases Supported:** 1–4
 
-**Includes:**
+#### Phase 1 — Data Validation & Statistical EDA
+- `week1_data_cleaning.ipynb`  
+- `01_EDA_Reimbursement.ipynb`
 
-- **Phase 1: Data Validation & Statistical EDA**
-  - `week1_data_cleaning.ipynb`
-  - `01_EDA_Reimbursement (3).ipynb`
+#### Phase 2 — Feature Engineering & Baseline Modeling
+- `02_Feature_Engineering_and_Baseline_Model.ipynb`  
+- `08_Feature_Correlation_and_Visualization.ipynb`  
+- `06_Performance_Summary.ipynb`  
+- `09_Model_Evaluation_Checklist.ipynb`
 
-- **Phase 2: Feature Engineering & Baseline Modeling**
-  - `02_Feature_Engineering_and_Baseline_Model.ipynb`
-  - `Feature Correlation and Visualization.ipynb`
+**Purpose:**  
+Sanity-check baseline model behavior, validate assumptions, and ensure feature engineering and evaluation steps meet modeling standards before advancing to nonlinear methods.
 
-- **Phase 3: Nonlinear & Ensemble Modeling**
-  - `Model Development & Integration.ipynb`
-  - `Phase3_Performance.ipynb`
-  - `Phase3_Performance_Metrics.ipynb`
+#### Phase 3 — Nonlinear & Ensemble Modeling
+- `07_Model_Development_and_Integration.ipynb`  
+- `03_Ensemble_Model_Performance.ipynb`  
+- `04_Ensemble_Model_Metrics.ipynb`
 
-- **Phase 4: Model Interpretability**
-  - `Model Interpretability & Feature-Impact Analysis.ipynb`
-  - `Calibrated Ensemble Performance (with Residual Model).ipynb`
+**Purpose:**  
+Train and evaluate nonlinear and ensemble regressors and generate official holdout predictions.
 
----
+#### Phase 4 — Interpretability & Diagnostic Analysis
+- `05_Model_Interpretability_and_Feature_Impact.ipynb`  
+- `Calibrated Ensemble Performance (with Residual Model).ipynb`
+
+**Important:**  
+The calibrated residual notebook is a **Phase 4 diagnostic and interpretability experiment**.  
+It does **not** replace the official Phase 3 stacking ensemble model.
+
+------------------------------------------------------------------------
 
 ### `data/` — Raw Inputs, Cleaned Data, and Modeling Artifacts
 
-**Purpose**  
-Centralized storage for all datasets used and generated throughout the project lifecycle.
-
 **Phases Supported:** 1–3
 
-**Includes:**
+**Raw Inputs**
+- `public_cases.json`
+- `private_cases.json`
 
-- **Raw Input Data**
-  - `public_cases.json`
-  - `private_cases.json`
+**Cleaned & Validated Datasets**
+- `public_clean.csv`
+- `private_clean.csv`
+- `combined_clean.csv`
 
-- **Cleaned & Validated Datasets**
-  - `public_clean.csv`
-  - `private_clean.csv`
-  - `combined_clean.csv`
+**Feature-Engineered Modeling Table**
+- `phase2_features_baseline_models.csv`
 
-- **Feature-Engineered Modeling Tables**
-  - `phase2_features_baseline_models.csv`
+**Phase 3 Predictions**
+- `phase3_predictions.csv`
 
-- **Model Outputs & Predictions**
-  - `phase3_predictions.csv`
+**Reference**
+- `TeamProjectInstructions.qmd`
 
-- **Reference Materials**
-  - `TeamProjectInstructions.qmd`
+------------------------------------------------------------------------
 
----
-
-### `reports/` — Reproducible Documentation & Formal Deliverables
-
-**Purpose**  
-Authoritative written documentation supporting analysis, grading, and stakeholder communication.
+### `reports/` — Formal Documentation & Deliverables
 
 **Phases Supported:** 1–4
 
-**Includes:**
+**Business Logic Documentation**
+- `Business_logic_summary.qmd`
+- `Business_logic_summary.html`
 
-- **Business Logic Documentation**
-  - `Business_logic_summary.qmd`
-  - `Business_logic_summary.html`
+**EDA & Baseline Modeling**
+- `EDA & Baseline Model Info.qmd`
+- `EDA & Baseline Model Info.html`
 
-- **EDA & Baseline Modeling Documentation**
-  - `EDA & Baseline Model Info.qmd`
-  - `EDA & Baseline Model Info.html`
+**Feature Engineering Rationale**
+- `Feature Definitions and Rationales Table Updated.qmd`
+- `Feature Definitions and Rationales Table Updated.html`
 
-- **Feature Engineering Documentation**
-  - `Feature Definitions and Rationales Table Updated.qmd`
-  - `Feature Definitions and Rationales Table Updated.html`
+**Phase 3–4 Addenda & Tuning**
+- `phase3_phase4_addendum.qmd`
+- `phase3_phase4_addendum.pdf`
+- `postprocessing_tuning.qmd`
 
-- **Phase Summaries & Addenda**
-  - `Phase1_summary.qmd`
-  - `phase3_phase4_addendum.qmd`
-  - `phase3_phase4_addendum.pdf`
+**Final Summary**
+- `project_Summary.qmd`
+- `project_Summary.pdf`
 
-- **Final Project Summary**
-  - `project_Summary.qmd`
-  - `project_Summary.pdf`
-  
----
+------------------------------------------------------------------------
 
 ### `scripts/` — Evaluation & Automation Utilities
 
-**Purpose**  
-Standalone Python scripts used for non-interactive execution of evaluation and prediction tasks.
-
 **Phases Supported:** 3
 
-**Includes:**
+- `phase3_performance_metrics.py` — computes MAE, RMSE, R², and match-rate thresholds  
+- `predict_test.py` — end-to-end prediction testing  
+- `predict_rules_test.py` — rule-based benchmark comparisons  
 
-- `phase3_performance_metrics.py`  
-  Computes MAE, RMSE, R², and within-dollar error thresholds on holdout data.
+------------------------------------------------------------------------
 
-- `predict_test.py`  
-  End-to-end prediction testing using trained models.
-
-- `predict_rules_test.py`  
-  Rule-based prediction benchmarking for comparison against learned behavior.
-
----
-
-### `src/` — Executable Reimbursement Engine Logic
-
-**Purpose**  
-Production-style implementation of the reconstructed reimbursement engine.
+### `src/` — Executable Reimbursement Engine
 
 **Phases Supported:** 3–4
 
-**Includes:**
-
-- **Reference Documentation**
-  - `INTERVIEWS.md`
-  - `PRD.md`
-
-- **Model Artifacts**
-  - `final_model.pkl`
-
-- **Prediction Logic**
-  - `predict.py`
-  - `predict_rules.py`
-
-- **Execution & Evaluation Wrappers**
+- `final_model.pkl` — **official Phase 3 stacking ensemble**
+- `predict.py`
+- `predict_rules.py`
+- Execution helpers:
   - `eval.sh`
   - `generate_results.sh`
   - `run.sh.template`
+- Business references:
+  - `INTERVIEWS.md`
+  - `PRD.md`
+- Engine-specific `README.md`
 
----
+------------------------------------------------------------------------
 
 ### `presentation/` — Final Project Synthesis
 
-**Purpose**  
-High-level synthesis of the complete project across all four phases.
+- `ACME_Project_Presentation.pdf`
 
-**Includes:**
+------------------------------------------------------------------------
 
-- `Final-Presentation-Phase-1-4.pdf`
+### Repository Metadata
 
----
-
-### Metadata & Configuration
-
-- `README.md` — Primary project documentation and execution guide  
-- `LICENSE` — Project licensing information  
-- `.idea/` — IDE-specific configuration files (ignored during evaluation)
+- `.idea/` — IDE configuration (non-essential)
+- `.gitignore`, `LICENSE`
+- Root `README.md`
+- `deleteme.txt`
 
 
 - ------------------------------------------------------------------------
