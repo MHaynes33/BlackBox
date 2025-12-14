@@ -1,0 +1,83 @@
+---
+title: "ACME Legacy Reimbursement – How to Run the Final Model"
+format:
+  typst-pdf:
+    template-partials:
+      - typst-show.typ
+      - typst-template.typ
+---
+
+Purpose
+
+This document explains how to run the final trained reimbursement model, what each supporting file does, and what outputs to expect. It is written so a teammate can reproduce the reported Phase 3 metrics without retraining models or guessing which notebook to use.
+
+What the final model is
+
+The final model is the file below:
+
+src/final_model.pkl
+
+This file is a saved, already-trained ensemble model. It should not be opened in a text editor. It is a binary artifact that must be loaded by Python. Treat it like a finished calculator: you run evaluations against it, you do not edit it.
+
+The official Phase 3 evaluation entry point
+
+The authoritative way to reproduce the Phase 3 results is:
+
+scripts/phase3_performance_metrics.py
+
+This script exists to produce the same metrics every time, using the final saved model. It loads the Phase 2 engineered dataset, loads the trained model artifact, applies the 75/25 holdout split, prints performance metrics, and writes a predictions file for audit.
+
+How to run it
+
+Run the script from the project root directory:
+
+python scripts/phase3_performance_metrics.py
+
+
+If you run it from a different folder, it may fail to locate the data/model paths depending on your working directory. The safest approach is always to run it from the repo root.
+
+What outputs you should see
+
+When run correctly, the script prints Phase 3 holdout metrics that match the values referenced in the project summary:
+
+MAE around 62
+
+RMSE around 95
+
+R^2 around 0.95
+
+Exact matches (<= $0.01) around 0%
+
+Close matches (<= $1.00) around 1.6%
+
+Test rows should be 250 (based on the 75/25 split of ~1,000 labeled rows)
+
+It also saves a file for review:
+
+data/phase3_predictions.csv
+
+This CSV includes the actual reimbursement, the model prediction, and the absolute error for the test set. It is used for verification and reporting.
+
+Notebook equivalent (for review, not the “official” run)
+
+The interactive notebook that mirrors the same evaluation is:
+
+Notebooks/04_Ensemble_Model_Metrics.ipynb
+
+This notebook is useful for stepping through the logic and validating intermediate results. The script remains the preferred method because it is faster to run and harder to accidentally change.
+
+Common mistakes that cause “wrong numbers”
+
+If your results do not match the expected values, it usually means one of these happened:
+
+A notebook retrained a lightweight model instead of loading src/final_model.pkl.
+
+The script or notebook was run from a different working directory and loaded the wrong file or failed over to a different path.
+
+The model artifact being evaluated is not src/final_model.pkl.
+
+The project summary metrics are tied specifically to evaluating the saved tuned model artifact, not a newly trained baseline.
+
+Interpretation in business terms
+
+The final model reproduces the overall reimbursement pattern well, which makes it a credible benchmark for comparing the legacy and modern systems. However, the model rarely matches the legacy output at the penny or even dollar level. That suggests the legacy system contains step-like rules (tiers, caps, rounding behavior) that are not fully captured by a smooth predictive model alone.
