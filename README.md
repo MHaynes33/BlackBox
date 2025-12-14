@@ -361,8 +361,7 @@ This project is organized into four sequential phases.  Each phase corresponds d
 ---
 
 ### Step 1: Data Validation & Cleaning
-**Notebook:** `Notebooks/week1_data_cleaning.ipynb`  
-https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/week1_data_cleaning.ipynb
+**Notebook:** [week1_data_cleaning.ipynb](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/week1_data_cleaning.ipynb)
 
 **What this does**
 - Loads and flattens both JSON datasets
@@ -380,8 +379,7 @@ https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/week1_data_cleaning.ip
 ---
 
 ### Step 2: Statistical EDA & Dataset Comparison
-**Notebook:** `Notebooks/01_EDA_Reimbursement .ipynb`  
-[01_EDA_Reimbursement .ipynb](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/01_EDA_Reimbursement%20.ipynb)
+**Notebook:** [01_EDA_Reimbursement .ipynb](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/01_EDA_Reimbursement%20.ipynb)
 
 **What this does**
 - Combines public and private datasets
@@ -400,7 +398,7 @@ https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/week1_data_cleaning.ip
 ---
 
 ### Step 3: Business Logic Summary Review
-**Report:** `reports/Business_logic_summary.html`
+**Report:** [Business_logic_summary.html](https://github.com/MHaynes33/BlackBox/blob/main/reports/Business_logic_summary.html)
 
 **What this contains**
 - Interview- and PRD-derived reimbursement logic hypotheses
@@ -432,8 +430,7 @@ https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/week1_data_cleaning.ip
 ---
 
 ### Step 1: Feature Engineering & Baseline Models
-**Notebook:** `Notebooks/02_Feature_Engineering_and_Baseline_Model.ipynb`  
-https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/02_Feature_Engineering_and_Baseline_Model.ipynb
+**Notebook:** [02_Feature_Engineering_and_Baseline_Model.ipynb](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/02_Feature_Engineering_and_Baseline_Model.ipynb)
 
 **What this does**
 - Engineers derived efficiency features
@@ -441,8 +438,7 @@ https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/02_Feature_Engineering
 - Trains baseline models
 
 **Outputs**
-- `data/phase2_features_baseline_models.csv`  
-https://github.com/MHaynes33/BlackBox/blob/main/data/phase2_features_baseline_models.csv
+- `data/phase2_features_baseline_models.csv`
 
 **How to run**
 - Open the notebook and run all cells.
@@ -450,8 +446,7 @@ https://github.com/MHaynes33/BlackBox/blob/main/data/phase2_features_baseline_mo
 ---
 
 ### Step 2: Correlation & Driver Analysis
-**Notebook:** `Notebooks/Feature Correlation and Visualization.ipynb`  
-https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/Feature%20Correlation%20and%20Visualization.ipynb
+**Notebook:** [08_Feature_Correlation_and_Visualization.ipynb](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/%2008_Feature_Correlation_and_Visualization.ipynb)
 
 **What this does**
 - Visualizes feature relationships and drivers
@@ -465,8 +460,7 @@ https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/Feature%20Correlation%
 ---
 
 ### Step 3: Baseline Performance Summary
-**Notebook:** `Notebooks/Performance Summary.ipynb`  
-https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/Performance%20Summary.ipynb
+**Notebook:** [06_Performance_Summary.ipynb](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/%2006_Performance_Summary.ipynb)
 
 **What this does**
 - Evaluates baseline model performance using regression metrics
@@ -480,8 +474,7 @@ https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/Performance%20Summary.
 ---
 
 ### Step 4: Review Phase 1 EDA & Baseline Model Report
-**Report:** `reports/EDA & Baseline Model Info.html`  
-https://github.com/MHaynes33/BlackBox/blob/main/reports/EDA%20%26%20Baseline%20Model%20Info.html
+**Report:** [EDA & Baseline Model Info.html](https://github.com/MHaynes33/BlackBox/blob/main/reports/EDA%20%26%20Baseline%20Model%20Info.html)
 
 **What this contains**
 - Phase 1 EDA recap
@@ -497,8 +490,7 @@ https://github.com/MHaynes33/BlackBox/blob/main/reports/EDA%20%26%20Baseline%20M
 ---
 
 ### Step 5: Review Feature Definitions & Rationales
-**Report:** `reports/Feature Definitions and Rationales Table Updated.html`  
-https://github.com/MHaynes33/BlackBox/blob/main/reports/Feature%20Definitions%20and%20Rationales%20Table%20Updated%20.html
+**Report:** [Feature Definitions and Rationales Table Updated .html](https://github.com/MHaynes33/BlackBox/blob/main/reports/Feature%20Definitions%20and%20Rationales%20Table%20Updated%20.html)
 
 **What this contains**
 - Feature definitions
