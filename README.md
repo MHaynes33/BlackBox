@@ -380,8 +380,8 @@ https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/week1_data_cleaning.ip
 ---
 
 ### Step 2: Statistical EDA & Dataset Comparison
-**Notebook:** `Notebooks/01_EDA_Reimbursement (3).ipynb`  
-https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/01_EDA_Reimbursement%20(3).ipynb
+**Notebook:** `Notebooks/01_EDA_Reimbursement .ipynb`  
+[01_EDA_Reimbursement .ipynb](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/01_EDA_Reimbursement%20.ipynb)
 
 **What this does**
 - Combines public and private datasets
