@@ -623,6 +623,55 @@ Explain Phase 3 model behavior, validate alignment with PRD documentation and em
 ## V. How to Run the Final Model: Stacking Ensemble
 - ------------------------------------------------------------------------
 
+# ACME Legacy Reimbursement – Final Model Overview
+
+This repository contains multiple experiments and notebooks, but only one model artifact and one execution path represent the final reported results for Phase 3 and Phase 4.
+
+## What matters
+
+- **Final model artifact:** `src/final_model.pkl`  
+  This is the tuned stacking ensemble used in the report. It is a binary file and is **not meant to be opened in an editor**.
+
+- **Official Phase 3 evaluation:** `scripts/phase3_performance_metrics.py`  
+  This script loads the final model and computes the metrics reported in the project summary.
+
+## How to reproduce reported metrics
+
+From the **project root** (the folder containing `src/`, `data/`, `scripts/`):
+
+```
+python scripts/phase3_performance_metrics.py
+```
+
+This script:
+- Loads `src/final_model.pkl` (no retraining)
+- Uses `data/phase2_features_baseline_models.csv`
+- Applies a 75/25 holdout split
+- Prints MAE, RMSE, R², and close/exact match rates
+- Writes predictions to `data/phase3_predictions.csv`
+
+## Expected results (approximate)
+
+- MAE: ~62  
+- RMSE: ~95  
+- R²: ~0.95  
+- Exact matches (≤ $0.01): ~0%  
+- Close matches (≤ $1.00): ~1.6%  
+
+If you see materially different values (e.g., MAE ~79), you are likely evaluating a retrained baseline model rather than the final saved artifact.
+
+## Notebooks
+
+- `Notebooks/04_Ensemble_Model_Metrics.ipynb`  
+  Interactive version of the same evaluation. Useful for inspection and learning. Results should match the script because it loads the same final model.
+
+Other notebooks may retrain models for exploration and should **not** be used for final reporting.
+
+## Documentation
+
+Detailed business context, modeling rationale, interpretability findings, and limitations are documented in the project summary QMD and rendered PDFs under `reports/`.
+
+
 ## VI. Final Notes
 
 ~ To get a more detailed overview of the project check our presentation: [ACME Project Presentation](https://github.com/MHaynes33/BlackBox/blob/main/presentation/ACME_Project_Presentation.pdf)
