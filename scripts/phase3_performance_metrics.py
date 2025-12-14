@@ -5,16 +5,16 @@ Outputs MAE/RMSE/R^2 and within-$ thresholds, and writes data/phase3_predictions
 
 import numpy as np
 import pandas as pd
+import joblib
 from math import sqrt
 from pathlib import Path
-from sklearn.ensemble import StackingRegressor, RandomForestRegressor, GradientBoostingRegressor
-from sklearn.tree import DecisionTreeRegressor
-from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 
 
 def main():
     data_path = Path("data/phase2_features_baseline_models.csv")
+    if not data_path.exists():
+        data_path = Path("../data/phase2_features_baseline_models.csv")
     df = pd.read_csv(data_path)
 
     features = [
@@ -32,17 +32,14 @@ def main():
 
     # 75/25 holdout split (index-based to mirror prior runs)
     split = int(0.75 * len(df))
-    X_train, X_test = X.iloc[:split], X.iloc[split:]
-    y_train, y_test = y.iloc[:split], y.iloc[split:]
+    X_test = X.iloc[split:]
+    y_test = y.iloc[split:]
 
-    base_models = [
-        ("decision_tree", DecisionTreeRegressor(random_state=42)),
-        ("random_forest", RandomForestRegressor(n_estimators=200, random_state=42)),
-        ("gradient_boosting", GradientBoostingRegressor(random_state=42)),
-    ]
-    meta_model = LinearRegression()
-    model = StackingRegressor(estimators=base_models, final_estimator=meta_model, passthrough=True)
-    model.fit(X_train, y_train)
+    # Load tuned stacking model used for reported metrics
+    model_path = Path("src/final_model.pkl")
+    if not model_path.exists():
+        model_path = Path("../src/final_model.pkl")
+    model = joblib.load(model_path)
 
     pred = model.predict(X_test)
     abs_diff = np.abs(y_test.values - pred)
