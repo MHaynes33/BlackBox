@@ -531,9 +531,7 @@ generates holdout predictions for downstream analysis.
 
 ### Step 1: Model Development & Integration
 
-**Notebook:**  
-`Notebooks/Model Development & Integration.ipynb`  
-https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/Model%20Development%20%26%20Integration.ipynb
+**Notebook:**  [07_Model_Development_and_Integration.ipynb](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/%2007_Model_Development_and_Integration.ipynb)
 
 #### What this does
 - Loads the Phase 2 engineered feature dataset
@@ -561,7 +559,6 @@ Open the notebook in JupyterLab and run all cells sequentially.
 
 **Script:**  
 `scripts/phase3_performance_metrics.py`  
-https://github.com/MHaynes33/BlackBox/blob/main/scripts/phase3_performance_metrics.py
 
 #### What this does
 - Loads the Phase 2 modeling dataset
@@ -576,7 +573,6 @@ https://github.com/MHaynes33/BlackBox/blob/main/scripts/phase3_performance_metri
 
 #### Outputs
 - `data/phase3_predictions.csv`  
-  https://github.com/MHaynes33/BlackBox/blob/main/data/phase3_predictions.csv
 
 #### How to run
 From the repository root:
@@ -599,8 +595,7 @@ Explain Phase 3 model behavior, validate alignment with PRD documentation and em
 
 ### Step 1: Interpretability & Feature-Impact Analysis
 
-**Notebook:** `Notebooks/Model Interpretability & Feature-Impact Analysis.ipynb`  
-<https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/Model%20Interpretability%20%26%20Feature-Impact%20Analysis.ipynb>
+**Notebook:** [05_Model_Interpretability_and_Feature_Impact.ipynb](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/%2005_Model_Interpretability_and_Feature_Impact.ipynb)
 
 **What this does**
 - Reviews feature importance and feature impact patterns
@@ -618,8 +613,7 @@ Explain Phase 3 model behavior, validate alignment with PRD documentation and em
 
 ### Step 2: Diagnostic Calibration & Residual Modeling (Post-Processing Experiment)
 
-**Notebook:** `Notebooks/Calibrated Ensemble Performance (with Residual Model).ipynb`  
-<https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/Calibrated%20Ensemble%20Performance%20(with%20Residual%20Model).ipynb)>
+**Notebook:** [Calibrated Ensemble Performance (with Residual Model).ipynb](https://github.com/MHaynes33/BlackBox/blob/main/Notebooks/Calibrated%20Ensemble%20Performance%20(with%20Residual%20Model).ipynb)
 
 > **Important:** This notebook is Phase 4 *diagnostic post-processing* and does **not** replace the official Phase 3 stacking ensemble model.  
 > It is used to evaluate generalization behavior, residual structure, and whether small post-hoc corrections reduce error without changing the underlying learned logic.
