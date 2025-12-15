@@ -52,6 +52,8 @@ The resulting model achieves **high predictive accuracy (\~0.95 R²)** while mai
 
 ### File Guide
 
+*Listed below are the key files found within the repository*
+
 ------------------------------------------------------------------------
 
 ### `Notebooks/` — Phase-Driven Analysis, Modeling, and Diagnostics
