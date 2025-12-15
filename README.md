@@ -176,7 +176,7 @@ It does **not** replace the official Phase 3 stacking ensemble model.
 ### `presentation/` — Final Project Synthesis
 
 - `ACME_Project_Presentation.pdf`
-
+- `Acme Project Recorded Presentation.mp4`
 ------------------------------------------------------------------------
 
 ### Repository Metadata
