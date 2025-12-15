@@ -676,6 +676,6 @@ Detailed business context, modeling rationale, interpretability findings, and li
 
 ## VI. Final Notes
 
-~ To get a more detailed overview of the project read through our presentation: [ACME Project Presentation](https://github.com/MHaynes33/BlackBox/blob/main/presentation/ACME_Project_Presentation.pdf) or watch it: [ACME_Project_Recorded_Presentation](
+~ To get a more detailed overview of the project read through our presentation: [ACME Project Presentation](https://github.com/MHaynes33/BlackBox/blob/main/presentation/ACME_Project_Presentation.pdf) or watch it: [ACME_Project_Recorded_Presentation](https://github.com/MHaynes33/BlackBox/blob/main/presentation/Acme%20Project%20Recorded%20Presentation.mp4)
 
 ~ For all other questions reach out to any of the members listed above
