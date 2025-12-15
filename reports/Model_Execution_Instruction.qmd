@@ -69,8 +69,13 @@ The following files support analysis and inspection but are not the source of re
 | File | Purpose |
 |---|---|
 | `Notebooks/04_Ensemble_Model_Metrics.ipynb` | Interactive version of the Phase 3 evaluation that loads the final model |
+| `scripts/phase3_performance_metrics.py` | Command-line evaluator for the tuned model; prints MAE/RMSE/R^2 and close/exact hit rates |
+| `data/phase2_features_baseline_models.csv` | Engineered feature set used to evaluate the model |
 | `src/predict.py` | Lightweight wrapper for generating predictions from inputs |
 | `data/phase3_predictions.csv` | Saved predictions from the official Phase 3 evaluation |
+| `reports/project_Summary.qmd` | Main report; Phase 3 scatter and Phase 4 permutation plots load the tuned model on the 75/25 holdout |
+| `reports/postprocessing_tuning.qmd` | Technical log of post-processing variants and their metrics |
+| `reports/phase3_phase4_addendum.qmd` | Narrative addendum for Phase 3/4 findings aligned to the tuned model |
 
 Notebooks that retrain models are useful for learning and experimentation, but they should not be used to report final performance.
 
